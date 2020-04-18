@@ -2,7 +2,7 @@ import React from 'react';
 import "firebase/auth";
 import "firebase/firestore";
 import * as firebase from "firebase/app";
-import Card from './Card';
+import Deck from './Deck';
 
 
 const firebaseConfig = {
@@ -27,9 +27,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: 'Rahul',
+      name: "rahul",
+      width: document.documentElement.clientWidth,
+      height: document.documentElement.clientHeight
     };
   }
+
+
 
 
   signUp = (e) => {
@@ -95,19 +99,56 @@ class App extends React.Component {
           this.setState({
             rawData: stockData
           })
-          console.log(stockData);
+          //build state data
+          var fullStockData = [];
+          userHoldings.docs.forEach(holding => {
+            var apiStockData;
+            for(var key in stockData){
+              if(stockData[key].quote.symbol.toLowerCase() === holding.data().ticker.toLowerCase()){
+                apiStockData = stockData[key].quote;
+              }
+            }
+            var percentChange = (apiStockData.latestPrice - apiStockData.previousClose) / apiStockData.previousClose;
+            percentChange = Math.round(percentChange * 100 * 100) / 100;
+            var changeType = percentChange >= 0 ? "percentChangeUp" : "percentChangeDown";
+            fullStockData.push({
+              key: holding.data().ticker,
+              name: apiStockData.companyName,
+              percentChange: percentChange,
+              changeType: changeType,
+              quantity: holding.data().quantity,
+              priceBought: holding.data().price,
+              price: apiStockData.latestPrice
+            })
+          })
+          this.setState({
+            currentHoldings: fullStockData
+          });
         }
+
       }else{
         console.log("user does not own anything");
       }
     });
   }
 
+displayWindowSize = () => {
+    // Get width and height of the window excluding scrollbars
+    var w = document.documentElement.clientWidth;
+    var h = document.documentElement.clientHeight;
+    this.setState({
+      width: w,
+      height: h
+    })
+}
+ 
+// Attaching the event listener function to window's resize event
+
   componentDidMount() {
     //set update interval
     // this.interval = setInterval(() => this.pullStockData(), 1000);
 
-
+    window.addEventListener("resize", this.displayWindowSize);
     //auth changes
     auth.onAuthStateChanged(user => {
       if(user){
@@ -156,7 +197,8 @@ class App extends React.Component {
         <p>Logged in as: {this.state.name}</p>
         <button onClick={this.pullStockData}>Update Data</button>
         <hr></hr>
-        <Card key="W" name="Wayfair" price={100} percentChange={10} changeType="percentChangeUp" height={window.innerHeight} width={window.innerWidth} quantity={10} priceBought={25} />
+        {/* <Card key="W" name="Wayfair" price={100} percentChange={10} changeType="percentChangeUp" height={window.innerHeight} width={window.innerWidth} quantity={10} priceBought={25} /> */}
+        <Deck currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
     );
 
