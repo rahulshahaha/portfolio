@@ -2,6 +2,8 @@ import React from 'react';
 import "firebase/auth";
 import "firebase/firestore";
 import * as firebase from "firebase/app";
+import Card from './Card';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPYU3kgXezIktVO4gK8orxOqGiA_4Ridc",
@@ -20,11 +22,6 @@ const db = firebase.firestore();
 
 
 
-//sign in
-
-//logout
-
-//auth status change
 
 class App extends React.Component {
   constructor(props) {
@@ -69,20 +66,57 @@ class App extends React.Component {
     auth.signOut();
   }
 
+  async getTickers(){
+      //pull tickers from db
+      var userRef = db.collection('users').doc(this.state.user.id);
+      db.collection('holdings').where("owner", "==", userRef).get().then(userHoldings => {
+        console.log(userHoldings.docs[0].data());
+        return userHoldings.docs[0].data().ticker;
+      });
+      //return "w,jnj,cgc"
+  }
 
-
-
+  pullStockData = () => {
+    //get ticker list
+    var tickers = '';
+    var userRef = db.collection('users').doc(this.state.user.id);
+    db.collection('holdings').where("owner", "==", userRef).get().then(userHoldings => {
+      if(userHoldings.docs[0] != null){
+        userHoldings.docs.forEach(holding => {
+            tickers += holding.data().ticker;
+            tickers += ',';
+        });
+        const Http = new XMLHttpRequest();
+        const url='https://cloud.iexapis.com/stable/stock/market/batch?symbols='+tickers+'&types=quote&range=1d&token=pk_ea3fad39b66c4c08a98acce72eda2aaa';
+        Http.open("GET", url);
+        Http.send();
+        Http.onload = (e) => {
+          var stockData = JSON.parse(Http.responseText);
+          this.setState({
+            rawData: stockData
+          })
+          console.log(stockData);
+        }
+      }else{
+        console.log("user does not own anything");
+      }
+    });
+  }
 
   componentDidMount() {
     //set update interval
-    // this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
+    // this.interval = setInterval(() => this.pullStockData(), 1000);
+
+
     //auth changes
     auth.onAuthStateChanged(user => {
       if(user){
         db.collection('users').doc(user.uid).get().then(doc => {
           this.setState({
-            name: doc.data().name
+            name: doc.data().name,
+            user: doc
           });
+          this.pullStockData();
         });
       }else{
         this.setState({
@@ -90,6 +124,8 @@ class App extends React.Component {
         });
       }
     });
+
+ 
   }
 
   componentWillUnmount() {
@@ -113,11 +149,14 @@ class App extends React.Component {
           <p id="logInError"></p>
           <button>Log in</button>
         </form>
-        <div id="logOUt">
+        <div id="logOut">
           <p>Log Out:</p>
           <button onClick={this.logOut}>Log out</button>
         </div>
         <p>Logged in as: {this.state.name}</p>
+        <button onClick={this.pullStockData}>Update Data</button>
+        <hr></hr>
+        <Card key="W" name="Wayfair" price={100} percentChange={10} changeType="percentChangeUp" height={window.innerHeight} width={window.innerWidth} quantity={10} priceBought={25} />
       </div>
     );
 
