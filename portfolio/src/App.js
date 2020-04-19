@@ -39,7 +39,6 @@ class App extends React.Component {
     var totalGain = 0;
     var percentGain = 0;
     var holdings = this.state.currentHoldings;
-    console.log(holdings);
     if(holdings != null){
       holdings.forEach(holding => {
         totalInvested += (holding.priceBought * holding.quantity);
@@ -113,17 +112,9 @@ class App extends React.Component {
 
   }
 
-  async getTickers(){
-      //pull tickers from db
-      var userRef = db.collection('users').doc(this.state.user.id);
-      db.collection('holdings').where("owner", "==", userRef).get().then(userHoldings => {
-        console.log(userHoldings.docs[0].data());
-        return userHoldings.docs[0].data().ticker;
-      });
-      //return "w,jnj,cgc"
-  }
 
-  pullStockData = (userHoldings) => {
+  pullStockData = () => {
+    var userHoldings = this.state.userHoldings;
     //get ticker list
     var tickers = '';
       if(userHoldings.docs[0] != null){
@@ -203,7 +194,10 @@ displayWindowSize = () => {
           });
           var userRef = db.collection('users').doc(this.state.user.id);
           db.collection('holdings').where("owner", "==", userRef).onSnapshot(userHoldings => {
-            this.pullStockData(userHoldings);
+            this.setState({
+              userHoldings: userHoldings
+            })
+            this.pullStockData();
           });
         });
       }else{
