@@ -2,9 +2,13 @@ import React from 'react';
 
 class Card extends React.Component {
 
+    handleDoubleCLick(){
+        console.log("doubleClick");
+    }
 
  
     render(){
+        var ticker = this.props.ticker;
         var percentUp = (this.props.price - this.props.priceBought) / this.props.priceBought;
         percentUp = percentUp * 100;
         percentUp = percentUp.toFixed(2);
@@ -15,7 +19,7 @@ class Card extends React.Component {
            perfromanceClass = "overallPerformanceDown";
         }
         return(
-           <div className="card">
+           <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,{ticker})}>
                <h1 className="companyName">{this.props.name}</h1>
                <h6 className="currentPrice">${this.props.price}</h6>
                <h6 className={this.props.changeType}>&nbsp; ({this.props.percentChange}%)</h6>

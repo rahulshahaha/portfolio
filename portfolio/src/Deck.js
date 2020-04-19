@@ -5,7 +5,8 @@ import Card from './Card';
 class Deck extends React.Component {
 
     
-    generateCards(){
+    generateCards = () =>{
+        var func = this.props.doubleClickFunction;
         var currentHoldings = this.props.currentHoldings;
         if(currentHoldings == null){
             return null;
@@ -13,7 +14,7 @@ class Deck extends React.Component {
         var height = this.props.height;
         var width = this.props.width;
         var cardsList = this.props.currentHoldings.map(function(s){
-            return <Card key={s.key} name={s.name} price={s.price} percentChange={s.percentChange} changeType={s.changeType} height={height} width={width} quantity={s.quantity} priceBought={s.priceBought} />;
+            return <Card doubleClickFunction={func} key={s.key} ticker={s.key} name={s.name} price={s.price} percentChange={s.percentChange} changeType={s.changeType} height={height} width={width} quantity={s.quantity} priceBought={s.priceBought} />;
         });
 
          return cardsList;

@@ -3,6 +3,8 @@ import "firebase/auth";
 import "firebase/firestore";
 import * as firebase from "firebase/app";
 import Deck from './Deck';
+import Nav from './Nav';
+import M from 'materialize-css';
 
 
 const firebaseConfig = {
@@ -21,13 +23,25 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 
+// setup materialize components
+document.addEventListener('DOMContentLoaded', function() {
+
+  var modals = document.querySelectorAll('.modal');
+  M.Modal.init(modals);
+
+  var items = document.querySelectorAll('.collapsible');
+  M.Collapsible.init(items);
+
+});
+
+
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "rahul",
+      email: "rahul",
       width: document.documentElement.clientWidth,
       height: document.documentElement.clientHeight
     };
@@ -62,11 +76,16 @@ class App extends React.Component {
 
   signUp = (e) => {
     e.preventDefault();
-    var form = new FormData(document.getElementById("signUpForm"));
-    var name = form.get("name");
-    var email = form.get("email");
-    var password = form.get("password");
-    document.getElementById("signUpForm").reset();
+    const signupForm = document.querySelector('#signup-form');
+    const email = signupForm['signup-email'].value;
+    const password = signupForm['signup-password'].value;
+    const name = signupForm['signup-name'].value;
+    document.getElementById("signup-form").reset();
+    console.log(email, password, name);
+
+    const modal = document.querySelector('#modal-signup');
+    M.Modal.getInstance(modal).close();
+    signupForm.reset();
 
     auth.createUserWithEmailAndPassword(email,password).then(cred => {
       db.collection('users').doc(cred.user.uid).set({
@@ -189,7 +208,7 @@ displayWindowSize = () => {
       if(user){
         db.collection('users').doc(user.uid).get().then(doc => {
           this.setState({
-            name: doc.data().name,
+            email: doc.data().email,
             user: doc
           });
           var userRef = db.collection('users').doc(this.state.user.id);
@@ -202,7 +221,7 @@ displayWindowSize = () => {
         });
       }else{
         this.setState({
-          name: 'Not Logged In',
+          email: 'Not Logged In',
           currentHoldings: null,
           totalInvested: 0,
           totalValue: 0,
@@ -219,17 +238,15 @@ displayWindowSize = () => {
     clearInterval(this.interval);
   }
 
+  handleDoubleCLick(ticker){
+    //show update modal
+  }
+
   render(){
     return (
       <div className="App">
-        <form id="signUpForm" onSubmit={this.signUp}>
-          <p>Sign up: </p>
-          <input type="text" name="name" placeholder="name"></input>
-          <input type="text" name="email" placeholder="email"></input>
-          <input type="password" name="password" placeholder="password"></input>
-          <button>Sign up</button>
-        </form>
-        <form id="logInForm" onSubmit={this.logIn}>
+        <Nav signUpSubmit={this.signUp} logOut={this.logOut}></Nav>
+        <form autoComplete="off" id="logInForm" onSubmit={this.logIn}>
           <p>Log in: </p>
           <input type="text" name="email" placeholder="email"></input>
           <input type="password" name="password" placeholder="password"></input>
@@ -240,9 +257,9 @@ displayWindowSize = () => {
           <p>Log Out:</p>
           <button onClick={this.logOut}>Log out</button>
         </div>
-        <p>Logged in as: {this.state.name}</p>
+        <p>Logged in as: {this.state.email}</p>
         <button onClick={this.pullStockData}>Update Data</button>
-        <form id="addHolding" onSubmit={this.addHolding}>
+        <form autoComplete="off" id="addHolding" onSubmit={this.addHolding}>
           <p>Add Holding: </p>
           <input type="text" name="ticker" placeholder="ticker"></input>
           <input type="number" name="price" placeholder="price" step="0.0000001"></input>
@@ -252,7 +269,7 @@ displayWindowSize = () => {
         <hr></hr>
         <h3>Total Value: ${this.state.totalValue} Total Gain: ${this.state.totalGain}({this.state.percentGain}%)</h3>
         {/* <Card key="W" name="Wayfair" price={100} percentChange={10} changeType="percentChangeUp" height={window.innerHeight} width={window.innerWidth} quantity={10} priceBought={25} /> */}
-        <Deck currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
+        <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
     );
 
