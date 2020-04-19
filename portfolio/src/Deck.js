@@ -7,7 +7,6 @@ class Deck extends React.Component {
     
     generateCards(){
         var currentHoldings = this.props.currentHoldings;
-        console.log(currentHoldings);
         if(currentHoldings == null){
             return null;
         }

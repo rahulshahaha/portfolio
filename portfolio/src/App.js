@@ -33,7 +33,32 @@ class App extends React.Component {
     };
   }
 
+  calculateMetrics = () =>{
+    var totalInvested = 0;
+    var totalValue = 0;
+    var totalGain = 0;
+    var percentGain = 0;
+    var holdings = this.state.currentHoldings;
+    console.log(holdings);
+    if(holdings != null){
+      holdings.forEach(holding => {
+        totalInvested += (holding.priceBought * holding.quantity);
+        totalValue += (holding.price * holding.quantity);
+      });
+    }
 
+    totalGain = totalValue - totalInvested;
+    percentGain = totalGain / totalInvested;
+    percentGain *= 100;
+
+    this.setState({
+      totalInvested: totalInvested.toFixed(2),
+      totalValue: totalValue.toFixed(2),
+      totalGain: totalGain.toFixed(2),
+      percentGain: percentGain.toFixed(2)
+    });
+
+  }
 
 
   signUp = (e) => {
@@ -70,6 +95,24 @@ class App extends React.Component {
     auth.signOut();
   }
 
+  addHolding = (e) => {
+    e.preventDefault();
+    var form = new FormData(document.getElementById("addHolding"));
+    var ticker = form.get("ticker");
+    var price = form.get("price");
+    var quantity = form.get("quantity");
+
+    db.collection("holdings").add({
+      ticker: ticker,
+      price: price,
+      quantity: quantity,
+      owner: db.doc('users/'+ firebase.auth().currentUser.uid)
+  }).then(() =>{
+    document.getElementById("addHolding").reset();
+  });
+
+  }
+
   async getTickers(){
       //pull tickers from db
       var userRef = db.collection('users').doc(this.state.user.id);
@@ -80,11 +123,9 @@ class App extends React.Component {
       //return "w,jnj,cgc"
   }
 
-  pullStockData = () => {
+  pullStockData = (userHoldings) => {
     //get ticker list
     var tickers = '';
-    var userRef = db.collection('users').doc(this.state.user.id);
-    db.collection('holdings').where("owner", "==", userRef).get().then(userHoldings => {
       if(userHoldings.docs[0] != null){
         userHoldings.docs.forEach(holding => {
             tickers += holding.data().ticker;
@@ -124,12 +165,12 @@ class App extends React.Component {
           this.setState({
             currentHoldings: fullStockData
           });
+          this.calculateMetrics();
         }
 
       }else{
         console.log("user does not own anything");
       }
-    });
   }
 
 displayWindowSize = () => {
@@ -148,7 +189,10 @@ displayWindowSize = () => {
     //set update interval
     // this.interval = setInterval(() => this.pullStockData(), 1000);
 
+    //window size changes
     window.addEventListener("resize", this.displayWindowSize);
+
+
     //auth changes
     auth.onAuthStateChanged(user => {
       if(user){
@@ -157,11 +201,19 @@ displayWindowSize = () => {
             name: doc.data().name,
             user: doc
           });
-          this.pullStockData();
+          var userRef = db.collection('users').doc(this.state.user.id);
+          db.collection('holdings').where("owner", "==", userRef).onSnapshot(userHoldings => {
+            this.pullStockData(userHoldings);
+          });
         });
       }else{
         this.setState({
-          name: 'Not Logged In'
+          name: 'Not Logged In',
+          currentHoldings: null,
+          totalInvested: 0,
+          totalValue: 0,
+          totalGain: 0,
+          percentGain: 0
         });
       }
     });
@@ -196,7 +248,15 @@ displayWindowSize = () => {
         </div>
         <p>Logged in as: {this.state.name}</p>
         <button onClick={this.pullStockData}>Update Data</button>
+        <form id="addHolding" onSubmit={this.addHolding}>
+          <p>Add Holding: </p>
+          <input type="text" name="ticker" placeholder="ticker"></input>
+          <input type="number" name="price" placeholder="price" step="0.0000001"></input>
+          <input type="number" name="quantity" placeholder="quantity" step="0.0000001"></input>
+          <button>Add holding</button>
+        </form>
         <hr></hr>
+        <h1>Total Value: ${this.state.totalValue} Total Gain: ${this.state.totalGain}({this.state.percentGain}%)</h1>
         {/* <Card key="W" name="Wayfair" price={100} percentChange={10} changeType="percentChangeUp" height={window.innerHeight} width={window.innerWidth} quantity={10} priceBought={25} /> */}
         <Deck currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
