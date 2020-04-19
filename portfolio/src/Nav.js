@@ -17,9 +17,9 @@ class Nav extends React.Component {
                             <li className="logged-in">
                                 <button className="btn black darken-2 z-depth-0" id="logout" onClick={this.props.logOut}>Logout</button>
                             </li>
-                            {/* <li className="logged-out">
+                            <li className="logged-out">
                                 <button className="btn black darken-2 z-depth-0 modal-trigger" data-target="modal-login">Login</button>
-                            </li> */}
+                            </li>
                             <li className="logged-out">
                                 <button className="btn black darken-2 z-depth-0 modal-trigger" data-target="modal-signup">Sign up</button>
                             </li>
@@ -43,6 +43,23 @@ class Nav extends React.Component {
                             <label htmlFor="signup-name">Name</label>
                         </div>
                         <button className="btn black darken-2 z-depth-0">Sign up</button>
+                        <p className="error pink-text center-align"></p>
+                    </form>
+                    </div>
+                </div>
+                <div id="modal-login" className="modal grey darken-3">
+                    <div className="modal-content">
+                    <h4 className="white-text">Login</h4><br />
+                    <form id="login-form" onSubmit={this.props.loginSubmit}>
+                        <div className="input-field">
+                        <input className="white-text" type="email" id="login-email" required />
+                        <label htmlFor="login-email">Email address</label>
+                        </div>
+                        <div className="input-field">
+                        <input className="white-text" type="password" id="login-password" required />
+                        <label htmlFor="login-password">Your password</label>
+                        </div>
+                        <button className="btn black darken-2 z-depth-0">Login</button>
                         <p className="error pink-text center-align"></p>
                     </form>
                     </div>

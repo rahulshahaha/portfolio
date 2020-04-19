@@ -97,15 +97,20 @@ class App extends React.Component {
 
   logIn = (e) => {
     e.preventDefault();
-    var form = new FormData(document.getElementById("logInForm"));
-    var email = form.get("email");
-    var password = form.get("password");
+    const loginForm = document.querySelector('#login-form');
+    const email = loginForm['login-email'].value;
+    const password = loginForm['login-password'].value;
+    // var form = new FormData(document.getElementById("logInForm"));
+    // var email = form.get("email");
+    // var password = form.get("password");
 
     auth.signInWithEmailAndPassword(email,password).then(cred => {
-      document.getElementById("logInForm").reset();
-      document.getElementById("logInError").innerHTML = "";
+      const modal = document.querySelector('#modal-login');
+      M.Modal.getInstance(modal).close();
+      loginForm.reset();
+      loginForm.querySelector('.error').innerHTML = '';
   }).catch(err => {
-    document.getElementById("logInError").innerHTML = err.message;
+    loginForm.querySelector('.error').innerHTML = err.message;
   });
   }
 
@@ -245,18 +250,7 @@ displayWindowSize = () => {
   render(){
     return (
       <div className="App">
-        <Nav signUpSubmit={this.signUp} logOut={this.logOut}></Nav>
-        <form autoComplete="off" id="logInForm" onSubmit={this.logIn}>
-          <p>Log in: </p>
-          <input type="text" name="email" placeholder="email"></input>
-          <input type="password" name="password" placeholder="password"></input>
-          <p id="logInError"></p>
-          <button>Log in</button>
-        </form>
-        <div id="logOut">
-          <p>Log Out:</p>
-          <button onClick={this.logOut}>Log out</button>
-        </div>
+        <Nav loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut}></Nav>
         <p>Logged in as: {this.state.email}</p>
         <button onClick={this.pullStockData}>Update Data</button>
         <form autoComplete="off" id="addHolding" onSubmit={this.addHolding}>
