@@ -250,7 +250,7 @@ displayWindowSize = () => {
           <button>Add holding</button>
         </form>
         <hr></hr>
-        <h1>Total Value: ${this.state.totalValue} Total Gain: ${this.state.totalGain}({this.state.percentGain}%)</h1>
+        <h3>Total Value: ${this.state.totalValue} Total Gain: ${this.state.totalGain}({this.state.percentGain}%)</h3>
         {/* <Card key="W" name="Wayfair" price={100} percentChange={10} changeType="percentChangeUp" height={window.innerHeight} width={window.innerWidth} quantity={10} priceBought={25} /> */}
         <Deck currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
