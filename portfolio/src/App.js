@@ -53,10 +53,13 @@ class App extends React.Component {
     var totalGain = 0;
     var percentGain = 0;
     var holdings = this.state.currentHoldings;
+    var dayGain = 0;
+    var dayGainPercent = 0;
     if(holdings != null){
       holdings.forEach(holding => {
         totalInvested += (holding.priceBought * holding.quantity);
         totalValue += (holding.price * holding.quantity);
+        dayGain += (holding.quantity*(holding.price - holding.previousClose));
       });
     }
 
@@ -64,11 +67,17 @@ class App extends React.Component {
     percentGain = totalGain / totalInvested;
     percentGain *= 100;
 
+    var beforeValue = totalValue - dayGain;
+    dayGainPercent = (totalValue - beforeValue) / beforeValue
+    dayGainPercent *= 100;
+
     this.setState({
       totalInvested: totalInvested.toFixed(2),
       totalValue: totalValue.toFixed(2),
       totalGain: totalGain.toFixed(2),
-      percentGain: percentGain.toFixed(2)
+      percentGain: percentGain.toFixed(2),
+      dayGain: dayGain.toFixed(2),
+      dayGainPercent: dayGainPercent.toFixed(2)
     });
 
   }
@@ -180,7 +189,8 @@ class App extends React.Component {
               changeType: changeType,
               quantity: holding.data().quantity,
               priceBought: holding.data().price,
-              price: apiStockData.latestPrice
+              price: apiStockData.latestPrice,
+              previousClose: apiStockData.previousClose
             })
           })
           this.setState({
@@ -258,9 +268,15 @@ displayWindowSize = () => {
   render(){
     var totalGainColor;
     if(this.state.totalGain >= 0){
-      totalGainColor = "left green-text text-darken-4 valign-wrapper"
+      totalGainColor = "green-text text-darken-4 valign-wrapper"
     }else{
-      totalGainColor = "left red-text text-darken-2 valign-wrapper"
+      totalGainColor = "red-text text-darken-2 valign-wrapper"
+    }
+    var dayGainColor
+    if(this.state.dayGain >0){
+      dayGainColor = "green-text text-darken-4 valign-wrapper"
+    }else{
+      dayGainColor = "red-text text-darken-2 valign-wrapper"
     }
     return (
       <div className="App">
@@ -268,9 +284,10 @@ displayWindowSize = () => {
         <p>Logged in as: {this.state.email}</p>
         <button onClick={this.pullStockData}>Update Data</button>
         <hr></hr>
-        <h3 className="left valign-wrapper">Total Value: ${this.state.totalValue} Total Gain:</h3>
-        <h3 className={totalGainColor}>${this.state.totalGain}({this.state.percentGain}%)</h3>
-        <hr className="newLine"></hr>
+        <h3 className="valign-wrapper">Total Value: ${this.state.totalValue}</h3>
+        <h3 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${this.state.totalGain} ({this.state.percentGain}%)</span></h3>
+        <h3 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${this.state.dayGain} ({this.state.dayGainPercent}%)</span></h3>
+        <hr></hr>
         <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
     );
