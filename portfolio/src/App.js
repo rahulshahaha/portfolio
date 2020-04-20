@@ -120,10 +120,14 @@ class App extends React.Component {
 
   addHolding = (e) => {
     e.preventDefault();
-    var form = new FormData(document.getElementById("addHolding"));
-    var ticker = form.get("ticker");
-    var price = form.get("price");
-    var quantity = form.get("quantity");
+    const addHoldingForm = document.querySelector('#addHolding-form');
+    const ticker = addHoldingForm['addHolding-ticker'].value;
+    const quantity = addHoldingForm['addHolding-quantity'].value;
+    const price = addHoldingForm['addHolding-price'].value;
+    // var form = new FormData(document.getElementById("addHolding"));
+    // var ticker = form.get("ticker");
+    // var price = form.get("price");
+    // var quantity = form.get("quantity");
 
     db.collection("holdings").add({
       ticker: ticker,
@@ -131,7 +135,9 @@ class App extends React.Component {
       quantity: quantity,
       owner: db.doc('users/'+ firebase.auth().currentUser.uid)
   }).then(() =>{
-    document.getElementById("addHolding").reset();
+    //const modal = document.querySelector('#modal-addHolding');
+    //M.Modal.getInstance(modal).close();
+    addHoldingForm.reset();
   });
 
   }
@@ -214,7 +220,8 @@ displayWindowSize = () => {
         db.collection('users').doc(user.uid).get().then(doc => {
           this.setState({
             email: doc.data().email,
-            user: doc
+            user: doc,
+            userLoggedIn: true
           });
           var userRef = db.collection('users').doc(this.state.user.id);
           db.collection('holdings').where("owner", "==", userRef).onSnapshot(userHoldings => {
@@ -231,7 +238,8 @@ displayWindowSize = () => {
           totalInvested: 0,
           totalValue: 0,
           totalGain: 0,
-          percentGain: 0
+          percentGain: 0,
+          userLoggedIn: false
         });
       }
     });
@@ -248,21 +256,21 @@ displayWindowSize = () => {
   }
 
   render(){
+    var totalGainColor;
+    if(this.state.totalGain >= 0){
+      totalGainColor = "left green-text text-darken-4 valign-wrapper"
+    }else{
+      totalGainColor = "left red-text text-darken-2 valign-wrapper"
+    }
     return (
       <div className="App">
-        <Nav loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut}></Nav>
+        <Nav userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
         <p>Logged in as: {this.state.email}</p>
         <button onClick={this.pullStockData}>Update Data</button>
-        <form autoComplete="off" id="addHolding" onSubmit={this.addHolding}>
-          <p>Add Holding: </p>
-          <input type="text" name="ticker" placeholder="ticker"></input>
-          <input type="number" name="price" placeholder="price" step="0.0000001"></input>
-          <input type="number" name="quantity" placeholder="quantity" step="0.0000001"></input>
-          <button>Add holding</button>
-        </form>
         <hr></hr>
-        <h3>Total Value: ${this.state.totalValue} Total Gain: ${this.state.totalGain}({this.state.percentGain}%)</h3>
-        {/* <Card key="W" name="Wayfair" price={100} percentChange={10} changeType="percentChangeUp" height={window.innerHeight} width={window.innerWidth} quantity={10} priceBought={25} /> */}
+        <h3 className="left valign-wrapper">Total Value: ${this.state.totalValue} Total Gain:</h3>
+        <h3 className={totalGainColor}>${this.state.totalGain}({this.state.percentGain}%)</h3>
+        <hr className="newLine"></hr>
         <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
     );

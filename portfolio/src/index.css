@@ -106,3 +106,7 @@ code {
 body{
   background-color: #808080;
 }
+
+.newLine{
+  clear: both;
+}
