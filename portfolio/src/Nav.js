@@ -82,7 +82,7 @@ class Nav extends React.Component {
                     </form>
                     </div>
                 </div>
-                <div id="modal-addHolding" className="modal bottom-sheet grey darken-3">
+                <div id="modal-addHolding" className="modal grey darken-3">
                     <div className="modal-content">
                     <h4 className="white-text">Add Holding</h4><br />
                     <form id="addHolding-form" onSubmit={this.props.addHoldingSubmit}>
@@ -103,7 +103,7 @@ class Nav extends React.Component {
                     </form>
                     </div>
                 </div>
-                <div id="modal-editHolding" className="modal bottom-sheet grey darken-3">
+                <div id="modal-editHolding" className="modal grey darken-3">
                     <div className="modal-content">
                     <h4 id="editHolding-company" className="white-text">Edit Holding</h4>
                     <form id="editHolding-form" onSubmit={this.props.editHoldingSubmit}>
