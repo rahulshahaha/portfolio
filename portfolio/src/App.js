@@ -160,7 +160,7 @@ class App extends React.Component {
           addHoldingError: ""
         })
         if(!isNaN(quantity) && !isNaN(price)){
-          this.dbAddHolding(ticker,quantity,price);
+          //this.dbAddHolding(ticker,quantity,price);
           this.setState({
             addHoldingError: ""
           })
@@ -243,7 +243,7 @@ class App extends React.Component {
             }
             var percentChange = (apiStockData.latestPrice - apiStockData.previousClose) / apiStockData.previousClose;
             percentChange = Math.round(percentChange * 100 * 100) / 100;
-            var changeType = percentChange >= 0 ? "percentChangeUp" : "percentChangeDown";
+            var changeType = percentChange >= 0 ? "percentChangeUp noSelect" : "percentChangeDown noSelect";
             fullStockData.push({
               key: holding.data().ticker,
               name: apiStockData.companyName,
@@ -325,9 +325,64 @@ displayWindowSize = () => {
     clearInterval(this.interval);
   }
 
-  handleDoubleCLick(ticker){
-    //show update modal
+  handleDoubleCLick(name,ticker,quantity,price){
+    const modal = document.querySelector('#modal-editHolding');
+    M.Modal.getInstance(modal).open();
+    const editHoldingForm = document.querySelector('#editHolding-form');
+    const editHoldingCompany = document.querySelector('#editHolding-company');
+
+    editHoldingForm['editHolding-quantity'].defaultValue = quantity;
+    editHoldingForm['editHolding-price'].defaultValue = price;
+    editHoldingForm['editHolding-ticker'].defaultValue = ticker;
+    editHoldingCompany.innerHTML = name + " (" + ticker + ")";
+    M.updateTextFields();
+    // const ticker = addHoldingForm['addHolding-ticker'].value.toLowerCase();
+    // const quantity = parseFloat(addHoldingForm['addHolding-quantity'].value);
+    // const price = parseFloat(addHoldingForm['addHolding-price'].value);
+
   }
+
+
+ editHolding = (e) =>{
+    e.preventDefault();
+    const modal = document.querySelector('#modal-editHolding');
+    const editHoldingForm = document.querySelector('#editHolding-form');
+
+    const ticker = editHoldingForm['editHolding-ticker'].value.toLowerCase();
+    const quantity = parseFloat(editHoldingForm['editHolding-quantity'].value);
+    const price = parseFloat(editHoldingForm['editHolding-price'].value);
+
+
+    if(!isNaN(quantity) && !isNaN(price)){
+      //this.dbAddHolding(ticker,quantity,price);
+      this.setState({
+        editHoldingError: ""
+      })
+      db.collection('holdings').where('owner','==',db.collection('users').doc(firebase.auth().currentUser.uid)).where('ticker','==',ticker).get().then(holdings => {
+        if(holdings.docs[0] == null){
+          this.setState({
+            editHoldingError: "Holding no longer exists"
+          })
+        }else{
+          db.collection('holdings').doc(holdings.docs[0].id).set({
+            ticker: ticker.toLowerCase(),
+            price: price,
+            quantity: quantity,
+            owner: db.doc('users/'+ firebase.auth().currentUser.uid)
+          }).then(() => {
+            M.Modal.getInstance(modal).close();
+            editHoldingForm.reset();
+            editHoldingForm.querySelector('.error').innerHTML = '';
+          });
+        }
+      });
+    }else{
+      this.setState({
+        editHoldingError: "Please input valid numbers"
+      })
+    }
+
+ }
 
   render(){
     var totalGainColor;
@@ -344,7 +399,7 @@ displayWindowSize = () => {
     }
     return (
       <div className="App">
-        <Nav addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
+        <Nav editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
         <p>Logged in as: {this.state.email}</p>
         <button onClick={this.pullStockData}>Update Data</button>
         <hr></hr>
