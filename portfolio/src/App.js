@@ -22,6 +22,17 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+//Delete test account holdings
+// db.collection('holdings').where('owner','==',db.collection('users').doc("xiaKXXUB4za5NkiFIrEBmkawTnu1")).get().then(holdings =>{
+//   holdings.forEach(holding => {
+//     db.collection('holdings').doc(holding.id).delete().then(() => {
+//         console.log("deleted");
+//     })
+//   });
+// });
+
+
+
 
 // setup materialize components
 document.addEventListener('DOMContentLoaded', function() {
@@ -130,24 +141,52 @@ class App extends React.Component {
   addHolding = (e) => {
     e.preventDefault();
     const addHoldingForm = document.querySelector('#addHolding-form');
-    const ticker = addHoldingForm['addHolding-ticker'].value;
-    const quantity = addHoldingForm['addHolding-quantity'].value;
-    const price = addHoldingForm['addHolding-price'].value;
-    // var form = new FormData(document.getElementById("addHolding"));
-    // var ticker = form.get("ticker");
-    // var price = form.get("price");
-    // var quantity = form.get("quantity");
+    const ticker = addHoldingForm['addHolding-ticker'].value.toLowerCase();
+    const quantity = parseFloat(addHoldingForm['addHolding-quantity'].value);
+    const price = parseFloat(addHoldingForm['addHolding-price'].value);
 
-    db.collection("holdings").add({
-      ticker: ticker,
-      price: price,
-      quantity: quantity,
-      owner: db.doc('users/'+ firebase.auth().currentUser.uid)
-  }).then(() =>{
-    //const modal = document.querySelector('#modal-addHolding');
-    //M.Modal.getInstance(modal).close();
-    addHoldingForm.reset();
-  });
+    if(!isNaN(quantity) && !isNaN(price)){
+      this.dbAddHolding(ticker,quantity,price);
+      this.setState({
+        addHoldingError: ""
+      });
+    }else{
+      this.setState({
+        addHoldingError: "Please input valid numbers"
+      })
+    }
+  }
+
+  dbAddHolding(ticker,quantity,price){
+    const addHoldingForm = document.querySelector('#addHolding-form');
+
+    //check if ticker exists
+    db.collection('holdings').where('owner','==',db.collection('users').doc(firebase.auth().currentUser.uid)).where('ticker','==',ticker).get().then(existingHoldings =>{
+      if(existingHoldings.docs[0] != null){
+        //ticker already exists
+        var existingTicker = existingHoldings.docs[0];
+        var newTicker = existingTicker.data().ticker;
+        var newQuantity = existingTicker.data().quantity + quantity;
+        var newPrice = ((price * quantity) + (existingTicker.data().price * existingTicker.data().quantity)) / newQuantity;
+        db.collection("holdings").doc(existingTicker.id).set({
+            ticker: newTicker,
+            quantity: newQuantity,
+            price: newPrice,
+            owner: existingTicker.data().owner
+        });
+      }else{
+        //ticker does not exist
+        db.collection("holdings").add({
+          ticker: ticker.toLowerCase(),
+          price: price,
+          quantity: quantity,
+          owner: db.doc('users/'+ firebase.auth().currentUser.uid)
+      }).then(() =>{
+        addHoldingForm.reset();
+      });
+      }
+    })
+
 
   }
 
@@ -227,6 +266,7 @@ displayWindowSize = () => {
     //auth changes
     auth.onAuthStateChanged(user => {
       if(user){
+        console.log(user.uid);
         db.collection('users').doc(user.uid).get().then(doc => {
           this.setState({
             email: doc.data().email,
@@ -249,6 +289,8 @@ displayWindowSize = () => {
           totalValue: 0,
           totalGain: 0,
           percentGain: 0,
+          dayGain: 0,
+          dayGainPercent: 0,
           userLoggedIn: false
         });
       }
@@ -280,7 +322,7 @@ displayWindowSize = () => {
     }
     return (
       <div className="App">
-        <Nav userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
+        <Nav addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
         <p>Logged in as: {this.state.email}</p>
         <button onClick={this.pullStockData}>Update Data</button>
         <hr></hr>

@@ -99,7 +99,7 @@ class Nav extends React.Component {
                         <label htmlFor="addHolding-price">Price</label>
                         </div>
                         <button className="btn black darken-2 z-depth-0">Add</button>
-                        <p className="error pink-text center-align"></p>
+                        <p className="error pink-text center-align">{this.props.addHoldingError}</p>
                     </form>
                     </div>
                 </div>
