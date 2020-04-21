@@ -101,7 +101,6 @@ class App extends React.Component {
     const password = signupForm['signup-password'].value;
     const name = signupForm['signup-name'].value;
     document.getElementById("signup-form").reset();
-    console.log(email, password, name);
 
     const modal = document.querySelector('#modal-signup');
     M.Modal.getInstance(modal).close();
@@ -145,16 +144,40 @@ class App extends React.Component {
     const quantity = parseFloat(addHoldingForm['addHolding-quantity'].value);
     const price = parseFloat(addHoldingForm['addHolding-price'].value);
 
-    if(!isNaN(quantity) && !isNaN(price)){
-      this.dbAddHolding(ticker,quantity,price);
-      this.setState({
-        addHoldingError: ""
+
+    const Http = new XMLHttpRequest();
+    const url='https://cloud.iexapis.com/stable/ref-data/iex/symbols?token=pk_ea3fad39b66c4c08a98acce72eda2aaa';
+    Http.open("GET", url);
+    Http.send();
+    Http.onload = (e) => {
+      var availibleData = JSON.parse(Http.responseText);
+      var matchingTickers = availibleData.filter(function(data){
+          return data.symbol === ticker.toUpperCase();
       });
-    }else{
-      this.setState({
-        addHoldingError: "Please input valid numbers"
-      })
+      if(matchingTickers.length > 0){
+        //ticker is valid
+        this.setState({
+          addHoldingError: ""
+        })
+        if(!isNaN(quantity) && !isNaN(price)){
+          this.dbAddHolding(ticker,quantity,price);
+          this.setState({
+            addHoldingError: ""
+          })
+        }else{
+          this.setState({
+            addHoldingError: "Please input valid numbers"
+          })
+        }
+      }else{
+        //ticker is not valid
+        this.setState({
+          addHoldingError: "Invalid ticker"
+        })
+      }
     }
+
+
   }
 
   dbAddHolding(ticker,quantity,price){
@@ -266,7 +289,6 @@ displayWindowSize = () => {
     //auth changes
     auth.onAuthStateChanged(user => {
       if(user){
-        console.log(user.uid);
         db.collection('users').doc(user.uid).get().then(doc => {
           this.setState({
             email: doc.data().email,
@@ -310,15 +332,15 @@ displayWindowSize = () => {
   render(){
     var totalGainColor;
     if(this.state.totalGain >= 0){
-      totalGainColor = "green-text text-darken-4 valign-wrapper"
+      totalGainColor = "green-text text-darken-4 valign-wrapper";
     }else{
-      totalGainColor = "red-text text-darken-2 valign-wrapper"
+      totalGainColor = "red-text text-darken-2 valign-wrapper";
     }
     var dayGainColor
     if(this.state.dayGain >0){
-      dayGainColor = "green-text text-darken-4 valign-wrapper"
+      dayGainColor = "green-text text-darken-4 valign-wrapper";
     }else{
-      dayGainColor = "red-text text-darken-2 valign-wrapper"
+      dayGainColor = "red-text text-darken-2 valign-wrapper";
     }
     return (
       <div className="App">
