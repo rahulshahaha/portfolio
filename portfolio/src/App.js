@@ -336,9 +336,6 @@ displayWindowSize = () => {
     editHoldingForm['editHolding-ticker'].defaultValue = ticker;
     editHoldingCompany.innerHTML = name + " (" + ticker + ")";
     M.updateTextFields();
-    // const ticker = addHoldingForm['addHolding-ticker'].value.toLowerCase();
-    // const quantity = parseFloat(addHoldingForm['addHolding-quantity'].value);
-    // const price = parseFloat(addHoldingForm['addHolding-price'].value);
 
   }
 
