@@ -160,7 +160,7 @@ class App extends React.Component {
           addHoldingError: ""
         })
         if(!isNaN(quantity) && !isNaN(price)){
-          //this.dbAddHolding(ticker,quantity,price);
+          this.dbAddHolding(ticker,quantity,price);
           this.setState({
             addHoldingError: ""
           })
