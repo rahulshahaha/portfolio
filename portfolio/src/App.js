@@ -38,12 +38,20 @@ const db = firebase.firestore();
 document.addEventListener('DOMContentLoaded', function() {
 
   var modals = document.querySelectorAll('.modal');
-  M.Modal.init(modals);
+  var modalOptions = {
+    onOpenStart: () => {
+      const addHoldingForm = document.querySelector('#addHolding-form');
+      //addHoldingForm.reset();
+      addHoldingForm['addHolding-ticker'].defaultValue = "";
+    }
+}
+  M.Modal.init(modals,modalOptions);
 
   var items = document.querySelectorAll('.collapsible');
   M.Collapsible.init(items);
 
 });
+
 
 
 
@@ -388,6 +396,33 @@ displayWindowSize = () => {
 
  }
 
+  addToPosition(){
+    //close position modal
+    const editModal = document.querySelector('#modal-editHolding');
+    const editHoldingForm = document.querySelector('#editHolding-form');
+    const ticker = editHoldingForm['editHolding-ticker'].value.toLowerCase();
+
+    M.Modal.getInstance(editModal).close();
+    editHoldingForm.reset();
+    editHoldingForm.querySelector('.error').innerHTML = '';
+
+    //open holding modal
+    const addModal = document.querySelector('#modal-addHolding');
+    const addHoldingForm = document.querySelector('#addHolding-form');
+    M.Modal.getInstance(addModal).open();
+
+    //populate ticker
+    addHoldingForm['addHolding-ticker'].defaultValue = ticker;
+    addHoldingForm['addHolding-quantity'].focus();
+    addHoldingForm['addHolding-quantity'].select();
+    M.updateTextFields();
+  }
+
+ removePosition(){
+
+ }
+
+
   render(){
     var totalGainColor;
     if(this.state.totalGain >= 0){
@@ -403,7 +438,7 @@ displayWindowSize = () => {
     }
     return (
       <div className="App">
-        <Nav editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
+        <Nav addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
         <p>Logged in as: {this.state.email}</p>
         <button onClick={this.pullStockData}>Update Data</button>
         <hr></hr>

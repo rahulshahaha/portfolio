@@ -119,6 +119,9 @@ class Nav extends React.Component {
                         <button className="btn black darken-2 z-depth-0">Save</button>
                         <p className="error pink-text center-align">{this.props.editHoldingError}</p>
                     </form>
+                        <hr></hr>
+                        <button className="left btn black darken-2 z-depth-0" onClick={this.props.addToPosition}>Add to Position</button>
+                        <button className="btn black darken-2 z-depth-0">Remove Position</button>
                     </div>
                 </div>
             </div>
