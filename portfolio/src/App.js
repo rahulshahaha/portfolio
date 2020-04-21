@@ -183,6 +183,7 @@ class App extends React.Component {
   dbAddHolding(ticker,quantity,price){
     const addHoldingForm = document.querySelector('#addHolding-form');
 
+
     //check if ticker exists
     db.collection('holdings').where('owner','==',db.collection('users').doc(firebase.auth().currentUser.uid)).where('ticker','==',ticker).get().then(existingHoldings =>{
       if(existingHoldings.docs[0] != null){
@@ -196,6 +197,10 @@ class App extends React.Component {
             quantity: newQuantity,
             price: newPrice,
             owner: existingTicker.data().owner
+        }).then(() => {
+          addHoldingForm.reset();
+          addHoldingForm['addHolding-ticker'].focus();
+          addHoldingForm['addHolding-ticker'].select();
         });
       }else{
         //ticker does not exist
@@ -206,6 +211,8 @@ class App extends React.Component {
           owner: db.doc('users/'+ firebase.auth().currentUser.uid)
       }).then(() =>{
         addHoldingForm.reset();
+        addHoldingForm['addHolding-ticker'].focus();
+        addHoldingForm['addHolding-ticker'].select();
       });
       }
     })
