@@ -436,16 +436,31 @@ displayWindowSize = () => {
     }else{
       dayGainColor = "red-text text-darken-2 valign-wrapper";
     }
+
+
+    let userInfo;
+    if(this.state.userLoggedIn){
+        userInfo = (
+          <div>
+            <p>Logged in as: {this.state.email}</p>
+            <button onClick={this.pullStockData}>Update Data</button>
+            <hr></hr>
+            <h3 className="valign-wrapper">Total Value: ${this.state.totalValue}</h3>
+            <h3 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${this.state.totalGain} ({this.state.percentGain}%)</span></h3>
+            <h3 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${this.state.dayGain} ({this.state.dayGainPercent}%)</span></h3>
+            <hr></hr>
+          </div>
+        );
+    }else{
+        userInfo = (
+          <hr></hr>
+        );
+    }
+
     return (
       <div className="App">
-        <Nav addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
-        <p>Logged in as: {this.state.email}</p>
-        <button onClick={this.pullStockData}>Update Data</button>
-        <hr></hr>
-        <h3 className="valign-wrapper">Total Value: ${this.state.totalValue}</h3>
-        <h3 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${this.state.totalGain} ({this.state.percentGain}%)</span></h3>
-        <h3 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${this.state.dayGain} ({this.state.dayGainPercent}%)</span></h3>
-        <hr></hr>
+        <Nav user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
+        {userInfo}
         <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
     );
