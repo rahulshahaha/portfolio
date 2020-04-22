@@ -7,7 +7,7 @@ class Nav extends React.Component {
         let navBar;
         if(this.props.userLoggedIn){
             navBar = (
-            <div>
+            <div className="navbar-fixed">
                 <nav className="z-depth-0 grey darken-3">
                     <div className="nav-wrapper">
                         <ul id="nav-mobile" className="left">
@@ -24,7 +24,7 @@ class Nav extends React.Component {
             );
         }else{
             navBar = (
-            <div>
+            <div className="navbar-fixed">
                 <nav className="z-depth-0 grey darken-3">
                     <div className="nav-wrapper">
                         <ul id="nav-mobile" className="left">
