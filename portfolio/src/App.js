@@ -457,8 +457,8 @@ displayWindowSize = () => {
         userInfo = (
           <div>
             <h3 className="valign-wrapper">Total Value: ${this.state.totalValue}</h3>
-            <h3 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${this.state.totalGain} ({this.state.percentGain}%)</span></h3>
-            <h3 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${this.state.dayGain} ({this.state.dayGainPercent}%)</span></h3>
+            <h6 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${this.state.totalGain} ({this.state.percentGain}%)</span></h6>
+            <h6 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${this.state.dayGain} ({this.state.dayGainPercent}%)</span></h6>
             <hr></hr>
           </div>
         );
