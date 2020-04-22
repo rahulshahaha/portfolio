@@ -223,6 +223,7 @@ class App extends React.Component {
           addHoldingForm.reset();
           addHoldingForm['addHolding-ticker'].focus();
           addHoldingForm['addHolding-ticker'].select();
+          M.toast({html: 'Added ' + quantity + ' ' + ticker + ' shares'});
         });
       }else{
         //ticker does not exist
@@ -235,6 +236,7 @@ class App extends React.Component {
         addHoldingForm.reset();
         addHoldingForm['addHolding-ticker'].focus();
         addHoldingForm['addHolding-ticker'].select();
+        M.toast({html: 'Added ' + quantity + ' ' + ticker + ' shares'});
       });
       }
     })
@@ -399,6 +401,7 @@ displayWindowSize = () => {
             M.Modal.getInstance(modal).close();
             editHoldingForm.reset();
             editHoldingForm.querySelector('.error').innerHTML = '';
+            M.toast({html: 'Edited ' + ticker + ' position'});
           });
         }
       });
@@ -432,7 +435,31 @@ displayWindowSize = () => {
     M.updateTextFields();
   }
 
- removePosition(){
+ removePositionConfirmation(){
+    const editHoldingForm = document.querySelector('#editHolding-form');
+    const ticker = editHoldingForm['editHolding-ticker'].value.toUpperCase();
+
+    //show confirmation modal
+    const confirmationModal = document.querySelector('#modal-deleteConfirmation');
+    M.Modal.getInstance(confirmationModal).open();
+    const deleteHoldingTicker = document.querySelector('#deleteHolding-details');
+    deleteHoldingTicker.innerHTML = 'This action will remove your ' + ticker + ' position';
+
+ }
+
+ removePosition = () =>{
+  const editModal = document.querySelector('#modal-editHolding');
+  const confirmationModal = document.querySelector('#modal-deleteConfirmation');
+  const editHoldingForm = document.querySelector('#editHolding-form');
+  const ticker = editHoldingForm['editHolding-ticker'].value.toUpperCase();
+
+  db.collection('holdings').where('owner','==',db.collection('users').doc(firebase.auth().currentUser.uid)).where('ticker','==',ticker).get().then(holding => {
+      db.collection('holdings').doc(holding.docs[0].id).delete().then(() => {
+        M.Modal.getInstance(editModal).close();
+        M.Modal.getInstance(confirmationModal).close();
+        M.toast({html: 'Removed ' + ticker + ' position'});
+      })
+  })
 
  }
 
@@ -470,7 +497,7 @@ displayWindowSize = () => {
 
     return (
       <div className="App">
-        <Nav dataUpdate={this.pullStockData} user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
+        <Nav removePosition={this.removePosition} removePositionConfirmation={this.removePositionConfirmation} dataUpdate={this.pullStockData} user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
         {userInfo}
         <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>

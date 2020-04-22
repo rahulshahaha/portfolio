@@ -126,7 +126,17 @@ class Nav extends React.Component {
                     </form>
                         <hr></hr>
                         <button className="left btn black darken-2 z-depth-0" onClick={this.props.addToPosition}>Add to Position</button>
-                        <button className="btn black darken-2 z-depth-0">Remove Position</button>
+                        <button className="btn black darken-2 z-depth-0" onClick={this.props.removePositionConfirmation}>Remove Position</button>
+                    </div>
+                </div>
+                <div id="modal-deleteConfirmation" className="modal grey darken-3">
+                    <div className="modal-content">
+                    <h4 className="white-text">Are you sure?</h4>
+                    <p className="white-text" id="deleteHolding-details"></p>
+                    </div>
+                    <div className="modal-footer grey darken-3">
+                    <a href="#!" className="btn-flat black white-text" onClick={this.props.removePosition}>Confirm</a>
+                    <a href="#!" className="modal-close btn-flat black white-text">Cancel</a>
                     </div>
                 </div>
             </div>
