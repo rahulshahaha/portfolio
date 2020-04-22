@@ -253,7 +253,7 @@ class App extends React.Component {
             tickers += ',';
         });
         const Http = new XMLHttpRequest();
-        const url='https://cloud.iexapis.com/stable/stock/market/batch?symbols='+tickers+'&types=quote&range=1d&token=pk_ea3fad39b66c4c08a98acce72eda2aaa';
+        const url='https://cloud.iexapis.com/stable/stock/market/batch?symbols='+tickers+'&types=quote&token=pk_ea3fad39b66c4c08a98acce72eda2aaa';
         Http.open("GET", url);
         Http.send();
         Http.onload = (e) => {
@@ -456,9 +456,6 @@ displayWindowSize = () => {
     if(this.state.userLoggedIn){
         userInfo = (
           <div>
-            <p>Logged in as: {this.state.email}</p>
-            <button onClick={this.pullStockData}>Update Data</button>
-            <hr></hr>
             <h3 className="valign-wrapper">Total Value: ${this.state.totalValue}</h3>
             <h3 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${this.state.totalGain} ({this.state.percentGain}%)</span></h3>
             <h3 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${this.state.dayGain} ({this.state.dayGainPercent}%)</span></h3>
@@ -467,13 +464,13 @@ displayWindowSize = () => {
         );
     }else{
         userInfo = (
-          <hr></hr>
+          <div></div>
         );
     }
 
     return (
       <div className="App">
-        <Nav user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
+        <Nav dataUpdate={this.pullStockData} user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
         {userInfo}
         <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
