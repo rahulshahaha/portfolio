@@ -22,30 +22,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-//Delete test account holdings
-// db.collection('holdings').where('owner','==',db.collection('users').doc("xiaKXXUB4za5NkiFIrEBmkawTnu1")).get().then(holdings =>{
-//   holdings.forEach(holding => {
-//     db.collection('holdings').doc(holding.id).delete().then(() => {
-//         console.log("deleted");
-//     })
-//   });
-// });
-
-
-//Capitalize all tickers
-// db.collection('holdings').get().then(holdings => {
-//   holdings.docs.forEach(holding => {
-//     console.log(holding.data());
-//     db.collection('holdings').doc(holding.id).set({
-//         ticker: holding.data().ticker.toUpperCase(),
-//         quantity:holding.data().quantity,
-//         price:holding.data().price,
-//         owner: holding.data().owner
-//     })
-//   })
-// })
-
-
 
 
 // setup materialize components
