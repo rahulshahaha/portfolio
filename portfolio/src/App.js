@@ -32,6 +32,20 @@ const db = firebase.firestore();
 // });
 
 
+//Capitalize all tickers
+// db.collection('holdings').get().then(holdings => {
+//   holdings.docs.forEach(holding => {
+//     console.log(holding.data());
+//     db.collection('holdings').doc(holding.id).set({
+//         ticker: holding.data().ticker.toUpperCase(),
+//         quantity:holding.data().quantity,
+//         price:holding.data().price,
+//         owner: holding.data().owner
+//     })
+//   })
+// })
+
+
 
 
 // setup materialize components
@@ -148,7 +162,7 @@ class App extends React.Component {
   addHolding = (e) => {
     e.preventDefault();
     const addHoldingForm = document.querySelector('#addHolding-form');
-    const ticker = addHoldingForm['addHolding-ticker'].value.toLowerCase();
+    const ticker = addHoldingForm['addHolding-ticker'].value.toUpperCase();
     const quantity = parseFloat(addHoldingForm['addHolding-quantity'].value);
     const price = parseFloat(addHoldingForm['addHolding-price'].value);
 
@@ -213,7 +227,7 @@ class App extends React.Component {
       }else{
         //ticker does not exist
         db.collection("holdings").add({
-          ticker: ticker.toLowerCase(),
+          ticker: ticker.toUpperCase(),
           price: price,
           quantity: quantity,
           owner: db.doc('users/'+ firebase.auth().currentUser.uid)
@@ -252,7 +266,7 @@ class App extends React.Component {
           userHoldings.docs.forEach(holding => {
             var apiStockData;
             for(var key in stockData){
-              if(stockData[key].quote.symbol.toLowerCase() === holding.data().ticker.toLowerCase()){
+              if(stockData[key].quote.symbol.toUpperCase() === holding.data().ticker.toUpperCase()){
                 apiStockData = stockData[key].quote;
               }
             }
@@ -360,7 +374,7 @@ displayWindowSize = () => {
     const modal = document.querySelector('#modal-editHolding');
     const editHoldingForm = document.querySelector('#editHolding-form');
 
-    const ticker = editHoldingForm['editHolding-ticker'].value.toLowerCase();
+    const ticker = editHoldingForm['editHolding-ticker'].value.toUpperCase();
     const quantity = parseFloat(editHoldingForm['editHolding-quantity'].value);
     const price = parseFloat(editHoldingForm['editHolding-price'].value);
 
@@ -377,7 +391,7 @@ displayWindowSize = () => {
           })
         }else{
           db.collection('holdings').doc(holdings.docs[0].id).set({
-            ticker: ticker.toLowerCase(),
+            ticker: ticker.toUpperCase(),
             price: price,
             quantity: quantity,
             owner: db.doc('users/'+ firebase.auth().currentUser.uid)
@@ -400,7 +414,7 @@ displayWindowSize = () => {
     //close position modal
     const editModal = document.querySelector('#modal-editHolding');
     const editHoldingForm = document.querySelector('#editHolding-form');
-    const ticker = editHoldingForm['editHolding-ticker'].value.toLowerCase();
+    const ticker = editHoldingForm['editHolding-ticker'].value.toUpperCase();
 
     M.Modal.getInstance(editModal).close();
     editHoldingForm.reset();
