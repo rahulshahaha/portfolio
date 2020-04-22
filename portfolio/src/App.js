@@ -33,7 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const addHoldingForm = document.querySelector('#addHolding-form');
       //addHoldingForm.reset();
       addHoldingForm['addHolding-ticker'].defaultValue = "";
-    }
+    },
+    opacity: 0,
+    preventScrolling: false
 }
   M.Modal.init(modals,modalOptions);
 
