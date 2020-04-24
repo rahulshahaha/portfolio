@@ -11,10 +11,11 @@ class Deck extends React.Component {
         if(currentHoldings == null){
             return null;
         }
+        console.log(this.props);
         var height = this.props.height;
         var width = this.props.width;
         var cardsList = this.props.currentHoldings.map(function(s){
-            return <Card doubleClickFunction={func} key={s.key} ticker={s.key} name={s.name} price={s.price} percentChange={s.percentChange} changeType={s.changeType} height={height} width={width} quantity={s.quantity} priceBought={s.priceBought} />;
+            return <Card doubleClickFunction={func} key={s.key} ticker={s.key} name={s.name} previousClose ={s.previousClose}  price={s.price} percentChange={s.percentChange} changeType={s.changeType} height={height} width={width} quantity={s.quantity} priceBought={s.priceBought} />;
         });
 
          return cardsList;

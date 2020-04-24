@@ -40,7 +40,13 @@ code {
 
 }
 
+.valueChangeUp{
+  color: #007000;
+}
 
+.valueChangeDown{
+  color: #D2222D;
+}
 
 .percentChangeUp, .overallPerformanceUp{
   color: #007000;
