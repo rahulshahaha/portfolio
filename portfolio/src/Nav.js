@@ -96,11 +96,11 @@ class Nav extends React.Component {
                         <label htmlFor="addHolding-ticker">Ticker</label>
                         </div>
                         <div className="input-field">
-                        <input className="white-text" type="number" id="addHolding-quantity" step="0.0000001" required />
+                        <input className="white-text" type="number" id="addHolding-quantity" step="any" required />
                         <label htmlFor="addHolding-quantity">Quantity</label>
                         </div>
                         <div className="input-field">
-                        <input className="white-text" type="number" id="addHolding-price" step="0.0000001" required />
+                        <input className="white-text" type="number" id="addHolding-price" step="any" required />
                         <label htmlFor="addHolding-price">Price</label>
                         </div>
                         <button className="btn black darken-2 z-depth-0">Add</button>
@@ -114,11 +114,11 @@ class Nav extends React.Component {
                     <form id="editHolding-form" onSubmit={this.props.editHoldingSubmit}>
                         <input type="text" id="editHolding-ticker" className="white-text hide" />
                         <div className="input-field">
-                        <input type="number" id="editHolding-quantity" step="0.0000001" required className="white-text" />
+                        <input type="number" id="editHolding-quantity" step="any" required className="white-text" />
                         <label htmlFor="editHolding-quantity" className="active">New Quantity</label>
                         </div>
                         <div className="input-field">
-                        <input className="white-text" type="number" step="0.0000001" id="editHolding-price" required />
+                        <input className="white-text" type="number" step="any" id="editHolding-price" required />
                         <label htmlFor="editHolding-price">New Price</label>
                         </div>
                         <button className="btn black darken-2 z-depth-0">Save</button>

@@ -238,9 +238,6 @@ class App extends React.Component {
         Http.send();
         Http.onload = (e) => {
           var stockData = JSON.parse(Http.responseText);
-          this.setState({
-            rawData: stockData
-          })
           //build state data
           var fullStockData = [];
           userHoldings.docs.forEach(holding => {
@@ -285,7 +282,6 @@ displayWindowSize = () => {
     })
 }
  
-// Attaching the event listener function to window's resize event
 
   componentDidMount() {
     //set update interval
@@ -300,7 +296,6 @@ displayWindowSize = () => {
       if(user){
         db.collection('users').doc(user.uid).get().then(doc => {
           this.setState({
-            email: doc.data().email,
             user: doc,
             userLoggedIn: true
           });
@@ -308,8 +303,9 @@ displayWindowSize = () => {
           db.collection('holdings').where("owner", "==", userRef).onSnapshot(userHoldings => {
             this.setState({
               userHoldings: userHoldings
-            })
-            this.pullStockData();
+            }, () => {
+              this.pullStockData();
+            });
           });
         });
       }else{
