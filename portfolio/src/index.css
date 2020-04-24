@@ -40,9 +40,7 @@ code {
 
 }
 
-.currentPrice, .overall{
-  float: left;
-}
+
 
 .percentChangeUp, .overallPerformanceUp{
   color: #007000;
@@ -53,9 +51,9 @@ code {
 }
 
 .currentPrice, .percentChangeDown, .percentChangeUp{
-  font-size: 2vh;
+  font-size: 4vh;
   margin-top: 0;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
 }
 
 .overall{

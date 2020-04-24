@@ -24,11 +24,8 @@ class Card extends React.Component {
         return(
            <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,name,ticker,quantity,priceBought)}>
                <h1 className="companyName noSelect">{this.props.name}</h1>
-               <h6 className="currentPrice noSelect">${this.props.price}</h6>
-               <h6 className={this.props.changeType}>&nbsp; ({this.props.percentChange}%)</h6>
-               <h6 className="overall noSelect">Overall:&nbsp;</h6>
-               <h6 className={perfromanceClass}>${dollarsUp}&nbsp;({percentUp}%)</h6>
-               {/* <Chart chartData = {this.props.chartData} width={this.props.width} height={this.props.height} /> */}
+               <h1 className="currentPrice noSelect">${this.props.price} <span className={this.props.changeType}>({this.props.percentChange}%)</span></h1>
+               <h6 className="overall noSelect">Overall:<span className={perfromanceClass}> ${dollarsUp} ({percentUp}%)</span></h6>
            </div>
         )
     }
