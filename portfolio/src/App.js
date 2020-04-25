@@ -287,6 +287,7 @@ displayWindowSize = () => {
     //set update interval
     // this.interval = setInterval(() => this.pullStockData(), 1000);
 
+
     //window size changes
     window.addEventListener("resize", this.displayWindowSize);
 
@@ -437,6 +438,14 @@ displayWindowSize = () => {
 
  }
 
+ numberWithCommas(x) {
+   if(x === undefined){
+     return 0;
+   }else{
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+   }
+}
+
 
   render(){
     var totalGainColor;
@@ -452,14 +461,19 @@ displayWindowSize = () => {
       dayGainColor = "red-text text-darken-2 valign-wrapper";
     }
 
+    var formattedTotalValue, formattedTotalGain, formattedDayGain;
+    formattedTotalValue = this.numberWithCommas(this.state.totalValue);
+    formattedTotalGain = this.numberWithCommas(this.state.totalGain);
+    formattedDayGain = this.numberWithCommas(this.state.dayGain);
+  
 
     let userInfo;
     if(this.state.userLoggedIn){
         userInfo = (
           <div>
-            <h3 className="valign-wrapper">Total Value: ${this.state.totalValue}</h3>
-            <h6 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${this.state.totalGain} ({this.state.percentGain}%)</span></h6>
-            <h6 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${this.state.dayGain} ({this.state.dayGainPercent}%)</span></h6>
+            <h3 className="valign-wrapper">Total Value: ${formattedTotalValue}</h3>
+            <h6 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${formattedTotalGain} ({this.state.percentGain}%)</span></h6>
+            <h6 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${formattedDayGain} ({this.state.dayGainPercent}%)</span></h6>
             <hr></hr>
           </div>
         );

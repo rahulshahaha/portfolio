@@ -11,7 +11,7 @@ class Deck extends React.Component {
         if(currentHoldings == null){
             return null;
         }
-        console.log(this.props);
+
         var height = this.props.height;
         var width = this.props.width;
         var cardsList = this.props.currentHoldings.map(function(s){

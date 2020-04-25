@@ -6,6 +6,10 @@ class Card extends React.Component {
         console.log("doubleClick");
     }
 
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
  
     render(){
         var ticker = this.props.ticker;
@@ -31,10 +35,16 @@ class Card extends React.Component {
         if(dollarsUp < 0){
            perfromanceClass = "overallPerformanceDown noSelect";
         }
+
+        value = this.numberWithCommas(value);
+        valueChange = this.numberWithCommas(valueChange);
+        dollarsUp = this.numberWithCommas(dollarsUp);
+        var price = this.numberWithCommas(this.props.price);
+
         return(
            <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,name,ticker,quantity,priceBought)}>
                <h1 className="companyName noSelect">{this.props.name}</h1>
-               <h1 className="currentPrice noSelect">${this.props.price} <span className={this.props.changeType}>({this.props.percentChange}%)</span></h1>
+               <h1 className="currentPrice noSelect">${price} <span className={this.props.changeType}>({this.props.percentChange}%)</span></h1>
                <h6 className="overall noSelect">Value:<span className={valueChangeClass}> ${value} (${valueChange})</span></h6>
                <h6 className="overall noSelect">Overall:<span className={perfromanceClass}> ${dollarsUp} ({percentUp}%)</span></h6>
            </div>
