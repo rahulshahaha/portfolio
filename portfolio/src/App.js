@@ -500,6 +500,7 @@ displayWindowSize = () => {
         searchWeek52High.innerHTML = "52 Week High: " + searchQuote.week52High;
         searchMarketCap.innerHTML = "Market Cap: $" + searchQuote.marketCap;
         searchYtdChange.innerHTML = "YTD Change: " + searchQuote.ytdChange;
+        M.Modal.getInstance(detailModal).open();
       }
     }else{
       //invalid ticker
@@ -507,7 +508,7 @@ displayWindowSize = () => {
     }
   }
 
-  M.Modal.getInstance(detailModal).open();
+
  }
 
  numberWithCommas(x) {
