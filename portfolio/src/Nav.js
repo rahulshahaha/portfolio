@@ -24,9 +24,9 @@ class Nav extends React.Component {
                                 </li>
                             </ul>
                         </div>
-                        <form autoComplete="off" className="right grey darken-3 input-field col l2">
-                            <input placeholder="Search" id="first_name" type="text" className="white-text"/>
-                            <label htmlFor="first_name"></label>
+                        <form onSubmit={this.props.search} id="search-form" autoComplete="off" className="right grey darken-3 input-field col l2">
+                            <input placeholder="Search" id="search-ticker" type="text" className="white-text"/>
+                            <label htmlFor="search-ticker"></label>
                         </form>
                     </div>
                 </nav>
@@ -52,6 +52,34 @@ class Nav extends React.Component {
 
             );
         }
+
+        // //setupSearchVars
+        // var searchCompanyName, searchTicker, searchPrice, searchPreviousClose, searchPe, searchExchange, searchWeek52Low, searchWeek52High,searchMarketCap, serachYtdChange;
+        // if(this.props.stockDetails.companyName === undefined){
+        //     searchCompanyName = "Company Name"
+        //     searchTicker = "Ticker"
+        //     searchPrice = "Price"
+        //     searchPreviousClose = "Previous Close"
+        //     searchPe = ""
+        // }else{
+        //     searchCompanyName = this.props.companyName
+        // }
+
+        // this.setState({
+        //     stockDetails: {
+        //       companyName: searchQuote.companyName,
+        //       ticker: searchQuery,
+        //       price: searchQuote.latestPrice,
+        //       previousClose: searchQuote.previousClose,
+        //       pe: searchQuote.peRatio,
+        //       exchange: searchQuote.primaryExchange,
+        //       week52Low: searchQuote.week52Low,
+        //       week52High: searchQuote.week52High,
+        //       marketCap: searchQuote.marketCap,
+        //       ytdChange: searchQuote.ytdChange
+        //     }
+        //   })
+
         return(
             <div className="nav">
                 {navBar}
@@ -121,11 +149,11 @@ class Nav extends React.Component {
                         <input type="text" id="editHolding-ticker" className="white-text hide" />
                         <div className="input-field">
                         <input type="number" id="editHolding-quantity" step="any" required className="white-text" />
-                        <label htmlFor="editHolding-quantity" className="active">New Quantity</label>
+                        <label htmlFor="editHolding-quantity" className="active">Quantity</label>
                         </div>
                         <div className="input-field">
                         <input className="white-text" type="number" step="any" id="editHolding-price" required />
-                        <label htmlFor="editHolding-price">New Price</label>
+                        <label htmlFor="editHolding-price">Price</label>
                         </div>
                         <button className="btn black darken-2 z-depth-0">Save</button>
                         <p className="error pink-text center-align">{this.props.editHoldingError}</p>
@@ -146,26 +174,17 @@ class Nav extends React.Component {
                     <a href="#!" className="modal-close btn-flat black white-text">Cancel</a>
                     </div>
                 </div>
-                <div id="modal-stockDetails" className="modal bottom-sheet grey darken-3">
+                <div id="modal-stockDetails" className="modal grey darken-3">
                     <div className="modal-content">
-                    <h4 id="stockDetails-company" className="white-text">Edit Holding</h4>
-                    <form id="editHolding-form" onSubmit={this.props.editHoldingSubmit}>
-                        <input type="text" id="editHolding-ticker" className="white-text hide" />
-                        <div className="input-field">
-                        <input type="number" id="editHolding-quantity" step="any" required className="white-text" />
-                        <label htmlFor="editHolding-quantity" className="active">New Quantity</label>
-                        </div>
-                        <div className="input-field">
-                        <input className="white-text" type="number" step="any" id="editHolding-price" required />
-                        <label htmlFor="editHolding-price">New Price</label>
-                        </div>
-                        <button className="btn black darken-2 z-depth-0">Save</button>
-                        <p className="error pink-text center-align">{this.props.editHoldingError}</p>
-                    </form>
-                        <hr></hr>
-                        <button className="left btn black darken-2 z-depth-0" onClick={this.props.addToPosition}>Add to Position</button>
-                        <button className="left btn black darken-2 z-depth-0">More details</button>
-                        <button className="btn black darken-2 z-depth-0" onClick={this.props.removePositionConfirmation}>Remove Position</button>
+                    <h4 id="stockDetails-company" className="white-text">Company</h4>
+                    <h4 id="stockDetails-price" className="white-text">Price</h4>
+                    <h4 id="stockDetails-previousClose" className="white-text">Previous Close</h4>
+                    <h4 id="stockDetails-pe" className="white-text">PE</h4>
+                    <h4 id="stockDetails-exchange" className="white-text">Exchange</h4>
+                    <h4 id="stockDetails-week52Low" className="white-text">52 Week Low</h4>
+                    <h4 id="stockDetails-week52High" className="white-text">52 Week High</h4>
+                    <h4 id="stockDetails-marketCap" className="white-text">Market Cap</h4>
+                    <h4 id="stockDetails-ytdChange" className="white-text">YTD Change</h4>
                     </div>
                 </div>
             </div>

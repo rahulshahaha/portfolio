@@ -438,6 +438,66 @@ displayWindowSize = () => {
 
  }
 
+ search = () =>{
+  const searchForm = document.querySelector('#search-form');
+  const searchQuery = searchForm['search-ticker'].value.toUpperCase();
+  searchForm['search-ticker'].value = '';
+  const detailModal = document.querySelector('#modal-stockDetails');
+
+  const checkTicker = new XMLHttpRequest();
+  const url='https://cloud.iexapis.com/stable/ref-data/iex/symbols?token=pk_ea3fad39b66c4c08a98acce72eda2aaa';
+  checkTicker.open("GET", url);
+  checkTicker.send();
+  checkTicker.onload = (e) => {
+    var availibleData = JSON.parse(checkTicker.responseText);
+    var matchingTickers = availibleData.filter(function(data){
+        return data.symbol === searchQuery.toUpperCase();
+    });
+    if(matchingTickers.length > 0){
+      //match
+      const pullQuote = new XMLHttpRequest();
+      const url='https://cloud.iexapis.com/stable/stock/'+searchQuery+'/quote?token=pk_ea3fad39b66c4c08a98acce72eda2aaa';
+      pullQuote.open("GET", url);
+      pullQuote.send();
+      pullQuote.onload = (e) => {
+        // const pullChartData = new XMLHttpRequest();
+        // const url='https://cloud.iexapis.com/stable/stock/'+searchQuery+'/chart/1y?token=pk_ea3fad39b66c4c08a98acce72eda2aaa&chartCloseOnly=true';
+        // pullChartData.open("GET", url);
+        // pullChartData.send();
+        // pullChartData.onload = (e) => {
+        //   var chartData = JSON.parse(pullChartData.responseText);
+        //   console.log(chartData);
+        // }
+        var searchQuote = JSON.parse(pullQuote.responseText);
+        const searchCompanyName = document.querySelector('#stockDetails-company');
+        const searchPrice = document.querySelector('#stockDetails-price');
+        const searchPreviousClose = document.querySelector('#stockDetails-previousClose');
+        const searchPE = document.querySelector('#stockDetails-pe');
+        const searchExchange = document.querySelector('#stockDetails-exchange');
+        const searchWeek52Low = document.querySelector('#stockDetails-week52Low');
+        const searchWeek52High = document.querySelector('#stockDetails-week52High');
+        const searchMarketCap = document.querySelector('#stockDetails-marketCap');
+        const searchYtdChange = document.querySelector('#stockDetails-ytdChange');
+
+        searchCompanyName.innerHTML = searchQuote.companyName + " (" + searchQuery + ")";
+        searchPrice.innerHTML = searchQuote.latestPrice;
+        searchPreviousClose.innerHTML = searchQuote.previousClose;
+        searchPE.innerHTML = searchQuote.peRatio;
+        searchExchange.innerHTML = searchQuote.primaryExchange;
+        searchWeek52Low.innerHTML = searchQuote.week52Low;
+        searchWeek52High.innerHTML = searchQuote.week52High;
+        searchMarketCap.innerHTML = searchQuote.marketCap;
+        searchYtdChange.innerHTML = searchQuote.ytdChange;
+      }
+    }else{
+      //invalid ticker
+      console.log("no match");
+    }
+  }
+
+  M.Modal.getInstance(detailModal).open();
+ }
+
  numberWithCommas(x) {
    if(x === undefined){
      return 0;
@@ -485,7 +545,7 @@ displayWindowSize = () => {
 
     return (
       <div className="App">
-        <Nav removePosition={this.removePosition} removePositionConfirmation={this.removePositionConfirmation} dataUpdate={this.pullStockData} user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
+        <Nav search={this.search} removePosition={this.removePosition} removePositionConfirmation={this.removePositionConfirmation} dataUpdate={this.pullStockData} user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
         {userInfo}
         <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
