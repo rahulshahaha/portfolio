@@ -2,26 +2,32 @@ import React from 'react';
 
 class Nav extends React.Component {
 
- 
+
     render(){
         let navBar;
         if(this.props.userLoggedIn){
             navBar = (
             <div className="navbar-fixed">
-                <nav className="z-depth-0 grey darken-3">
-                    <div className="nav-wrapper">
-                        <a href="." className="brand-logo center">Welcome, {this.props.user.data().name}</a>
-                        <ul id="nav-mobile" className="left">
-                            <li className="logged-in">
-                                <button className="btn black darken-2 z-depth-0" id="logout" onClick={this.props.logOut}>Logout</button>
-                            </li>
-                            <li className="logged-in">
-                                <button className="btn black darken-2 z-depth-0 modal-trigger" data-target="modal-addHolding">Add Holding</button>
-                            </li>
-                            <li className="logged-in">
-                                <button className="btn yellow darken-2 z-depth-0 black-text" onClick={this.props.dataUpdate}>Update Data</button>
-                            </li>
-                        </ul>
+                <nav className="z-depth-0 grey darken-3 col l10">
+                    <div className="row">
+                        <div className="nav-wrapper col l10">
+                            <a href="." className="brand-logo center">Welcome, {this.props.user.data().name}</a>
+                            <ul id="nav-mobile" className="left">
+                                <li className="logged-in">
+                                    <button className="btn black darken-2 z-depth-0" id="logout" onClick={this.props.logOut}>Logout</button>
+                                </li>
+                                <li className="logged-in">
+                                    <button className="btn black darken-2 z-depth-0 modal-trigger" data-target="modal-addHolding">Add Holding</button>
+                                </li>
+                                <li className="logged-in">
+                                    <button className="btn yellow darken-2 z-depth-0 black-text" onClick={this.props.dataUpdate}>Update Data</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <form autoComplete="off" className="right grey darken-3 input-field col l2">
+                            <input placeholder="Search" id="first_name" type="text" className="white-text"/>
+                            <label htmlFor="first_name"></label>
+                        </form>
                     </div>
                 </nav>
             </div>
@@ -126,6 +132,7 @@ class Nav extends React.Component {
                     </form>
                         <hr></hr>
                         <button className="left btn black darken-2 z-depth-0" onClick={this.props.addToPosition}>Add to Position</button>
+                        <button className="left btn black darken-2 z-depth-0">More details</button>
                         <button className="btn black darken-2 z-depth-0" onClick={this.props.removePositionConfirmation}>Remove Position</button>
                     </div>
                 </div>
@@ -137,6 +144,28 @@ class Nav extends React.Component {
                     <div className="modal-footer grey darken-3">
                     <a href="#!" className="btn-flat black white-text" onClick={this.props.removePosition}>Confirm</a>
                     <a href="#!" className="modal-close btn-flat black white-text">Cancel</a>
+                    </div>
+                </div>
+                <div id="modal-stockDetails" className="modal bottom-sheet grey darken-3">
+                    <div className="modal-content">
+                    <h4 id="stockDetails-company" className="white-text">Edit Holding</h4>
+                    <form id="editHolding-form" onSubmit={this.props.editHoldingSubmit}>
+                        <input type="text" id="editHolding-ticker" className="white-text hide" />
+                        <div className="input-field">
+                        <input type="number" id="editHolding-quantity" step="any" required className="white-text" />
+                        <label htmlFor="editHolding-quantity" className="active">New Quantity</label>
+                        </div>
+                        <div className="input-field">
+                        <input className="white-text" type="number" step="any" id="editHolding-price" required />
+                        <label htmlFor="editHolding-price">New Price</label>
+                        </div>
+                        <button className="btn black darken-2 z-depth-0">Save</button>
+                        <p className="error pink-text center-align">{this.props.editHoldingError}</p>
+                    </form>
+                        <hr></hr>
+                        <button className="left btn black darken-2 z-depth-0" onClick={this.props.addToPosition}>Add to Position</button>
+                        <button className="left btn black darken-2 z-depth-0">More details</button>
+                        <button className="btn black darken-2 z-depth-0" onClick={this.props.removePositionConfirmation}>Remove Position</button>
                     </div>
                 </div>
             </div>
