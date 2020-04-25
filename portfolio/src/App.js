@@ -444,6 +444,26 @@ displayWindowSize = () => {
   searchForm['search-ticker'].value = '';
   const detailModal = document.querySelector('#modal-stockDetails');
 
+  const searchCompanyName = document.querySelector('#stockDetails-company');
+  const searchPrice = document.querySelector('#stockDetails-price');
+  const searchPreviousClose = document.querySelector('#stockDetails-previousClose');
+  const searchPE = document.querySelector('#stockDetails-pe');
+  const searchExchange = document.querySelector('#stockDetails-exchange');
+  const searchWeek52Low = document.querySelector('#stockDetails-week52Low');
+  const searchWeek52High = document.querySelector('#stockDetails-week52High');
+  const searchMarketCap = document.querySelector('#stockDetails-marketCap');
+  const searchYtdChange = document.querySelector('#stockDetails-ytdChange');
+
+  searchCompanyName.innerHTML = "Company";
+  searchPrice.innerHTML = "Price";
+  searchPreviousClose.innerHTML = "Previous Close";
+  searchPE.innerHTML = "P/E Ratio";
+  searchExchange.innerHTML = "Exchange";
+  searchWeek52Low.innerHTML = "52 Week Low";
+  searchWeek52High.innerHTML = "52 Week High";
+  searchMarketCap.innerHTML = "Market Cap";
+  searchYtdChange.innerHTML = "YTD Change";
+
   const checkTicker = new XMLHttpRequest();
   const url='https://cloud.iexapis.com/stable/ref-data/iex/symbols?token=pk_ea3fad39b66c4c08a98acce72eda2aaa';
   checkTicker.open("GET", url);
@@ -469,25 +489,17 @@ displayWindowSize = () => {
         //   console.log(chartData);
         // }
         var searchQuote = JSON.parse(pullQuote.responseText);
-        const searchCompanyName = document.querySelector('#stockDetails-company');
-        const searchPrice = document.querySelector('#stockDetails-price');
-        const searchPreviousClose = document.querySelector('#stockDetails-previousClose');
-        const searchPE = document.querySelector('#stockDetails-pe');
-        const searchExchange = document.querySelector('#stockDetails-exchange');
-        const searchWeek52Low = document.querySelector('#stockDetails-week52Low');
-        const searchWeek52High = document.querySelector('#stockDetails-week52High');
-        const searchMarketCap = document.querySelector('#stockDetails-marketCap');
-        const searchYtdChange = document.querySelector('#stockDetails-ytdChange');
+
 
         searchCompanyName.innerHTML = searchQuote.companyName + " (" + searchQuery + ")";
-        searchPrice.innerHTML = searchQuote.latestPrice;
-        searchPreviousClose.innerHTML = searchQuote.previousClose;
-        searchPE.innerHTML = searchQuote.peRatio;
-        searchExchange.innerHTML = searchQuote.primaryExchange;
-        searchWeek52Low.innerHTML = searchQuote.week52Low;
-        searchWeek52High.innerHTML = searchQuote.week52High;
-        searchMarketCap.innerHTML = searchQuote.marketCap;
-        searchYtdChange.innerHTML = searchQuote.ytdChange;
+        searchPrice.innerHTML = "Last: $" + searchQuote.latestPrice;
+        searchPreviousClose.innerHTML = "Previous Close: $" + searchQuote.previousClose;
+        searchPE.innerHTML = "P/E Ratio: " + searchQuote.peRatio;
+        searchExchange.innerHTML = "Exchange: " + searchQuote.primaryExchange;
+        searchWeek52Low.innerHTML = "52 Week Low: " + searchQuote.week52Low;
+        searchWeek52High.innerHTML = "52 Week High: " + searchQuote.week52High;
+        searchMarketCap.innerHTML = "Market Cap: $" + searchQuote.marketCap;
+        searchYtdChange.innerHTML = "YTD Change: " + searchQuote.ytdChange;
       }
     }else{
       //invalid ticker
