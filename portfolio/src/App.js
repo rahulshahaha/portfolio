@@ -263,7 +263,10 @@ class App extends React.Component {
           })
           this.setState({
             currentHoldings: fullStockData
-          });
+          }, () => {
+            M.toast({html: 'Pulled updated market data'});
+        });
+
           this.calculateMetrics();
         }
 
@@ -438,10 +441,13 @@ displayWindowSize = () => {
 
  }
 
- search = () =>{
+ search = (e) =>{
+  e.preventDefault();
   const searchForm = document.querySelector('#search-form');
   const searchQuery = searchForm['search-ticker'].value.toUpperCase();
   searchForm['search-ticker'].value = '';
+
+  //window.open('https://finance.yahoo.com/quote/'+searchQuery, '_blank');
   const detailModal = document.querySelector('#modal-stockDetails');
 
   const searchCompanyName = document.querySelector('#stockDetails-company');
@@ -480,14 +486,6 @@ displayWindowSize = () => {
       pullQuote.open("GET", url);
       pullQuote.send();
       pullQuote.onload = (e) => {
-        // const pullChartData = new XMLHttpRequest();
-        // const url='https://cloud.iexapis.com/stable/stock/'+searchQuery+'/chart/1y?token=pk_ea3fad39b66c4c08a98acce72eda2aaa&chartCloseOnly=true';
-        // pullChartData.open("GET", url);
-        // pullChartData.send();
-        // pullChartData.onload = (e) => {
-        //   var chartData = JSON.parse(pullChartData.responseText);
-        //   console.log(chartData);
-        // }
         var searchQuote = JSON.parse(pullQuote.responseText);
 
 

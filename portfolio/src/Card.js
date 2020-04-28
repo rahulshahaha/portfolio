@@ -43,7 +43,7 @@ class Card extends React.Component {
 
         return(
            <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,name,ticker,quantity,priceBought)}>
-               <h1 className="companyName noSelect">{this.props.name}</h1>
+               <h1 className="companyName noSelect">{this.props.name} ({this.props.ticker})</h1>
                <h1 className="currentPrice noSelect">${price} <span className={this.props.changeType}>({this.props.percentChange}%)</span></h1>
                <h6 className="overall noSelect">Value:<span className={valueChangeClass}> ${value} (${valueChange})</span></h6>
                <h6 className="overall noSelect">Overall:<span className={perfromanceClass}> ${dollarsUp} ({percentUp}%)</span></h6>
