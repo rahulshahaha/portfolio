@@ -42,6 +42,8 @@ class Card extends React.Component {
         valueChange = this.numberWithCommas(valueChange);
         dollarsUp = this.numberWithCommas(dollarsUp);
         var price = this.numberWithCommas(this.props.price);
+        priceBought = this.numberWithCommas(priceBought);
+        purchaseValue = this.numberWithCommas(purchaseValue);
 
         return(
            <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,name,ticker,quantity,priceBought)}>

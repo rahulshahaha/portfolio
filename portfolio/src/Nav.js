@@ -53,32 +53,7 @@ class Nav extends React.Component {
             );
         }
 
-        // //setupSearchVars
-        // var searchCompanyName, searchTicker, searchPrice, searchPreviousClose, searchPe, searchExchange, searchWeek52Low, searchWeek52High,searchMarketCap, serachYtdChange;
-        // if(this.props.stockDetails.companyName === undefined){
-        //     searchCompanyName = "Company Name"
-        //     searchTicker = "Ticker"
-        //     searchPrice = "Price"
-        //     searchPreviousClose = "Previous Close"
-        //     searchPe = ""
-        // }else{
-        //     searchCompanyName = this.props.companyName
-        // }
 
-        // this.setState({
-        //     stockDetails: {
-        //       companyName: searchQuote.companyName,
-        //       ticker: searchQuery,
-        //       price: searchQuote.latestPrice,
-        //       previousClose: searchQuote.previousClose,
-        //       pe: searchQuote.peRatio,
-        //       exchange: searchQuote.primaryExchange,
-        //       week52Low: searchQuote.week52Low,
-        //       week52High: searchQuote.week52High,
-        //       marketCap: searchQuote.marketCap,
-        //       ytdChange: searchQuote.ytdChange
-        //     }
-        //   })
 
         return(
             <div className="nav">

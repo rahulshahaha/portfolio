@@ -4,6 +4,7 @@ import "firebase/firestore";
 import * as firebase from "firebase/app";
 import Deck from './Deck';
 import Nav from './Nav';
+import PortfolioHeader from './PortfolioHeader';
 import M from 'materialize-css';
 
 
@@ -54,8 +55,12 @@ class App extends React.Component {
     this.state = {
       email: "rahul",
       width: document.documentElement.clientWidth,
-      height: document.documentElement.clientHeight
-    };
+      height: document.documentElement.clientHeight,
+      userHoldings: {
+        docs: {
+        }
+      }
+      };
   }
 
   calculateMetrics = () =>{
@@ -519,45 +524,10 @@ displayWindowSize = () => {
 
 
   render(){
-    var totalGainColor;
-    if(this.state.totalGain >= 0){
-      totalGainColor = "green-text text-darken-4 valign-wrapper";
-    }else{
-      totalGainColor = "red-text text-darken-2 valign-wrapper";
-    }
-    var dayGainColor
-    if(this.state.dayGain >0){
-      dayGainColor = "green-text text-darken-4 valign-wrapper";
-    }else{
-      dayGainColor = "red-text text-darken-2 valign-wrapper";
-    }
-
-    var formattedTotalValue, formattedTotalGain, formattedDayGain;
-    formattedTotalValue = this.numberWithCommas(this.state.totalValue);
-    formattedTotalGain = this.numberWithCommas(this.state.totalGain);
-    formattedDayGain = this.numberWithCommas(this.state.dayGain);
-  
-
-    let userInfo;
-    if(this.state.userLoggedIn){
-        userInfo = (
-          <div>
-            <h3 className="valign-wrapper">Total Value: ${formattedTotalValue}</h3>
-            <h6 className="valign-wrapper">Total Gain: <span className={totalGainColor}>${formattedTotalGain} ({this.state.percentGain}%)</span></h6>
-            <h6 className="valign-wrapper">Day Gain: <span className={dayGainColor}>${formattedDayGain} ({this.state.dayGainPercent}%)</span></h6>
-            <hr></hr>
-          </div>
-        );
-    }else{
-        userInfo = (
-          <div></div>
-        );
-    }
-
     return (
       <div className="App">
         <Nav search={this.search} removePosition={this.removePosition} removePositionConfirmation={this.removePositionConfirmation} dataUpdate={this.pullStockData} user={this.state.user} addToPosition={this.addToPosition} editHoldingError={this.state.editHoldingError} editHoldingSubmit={this.editHolding} addHoldingError={this.state.addHoldingError} userLoggedIn={this.state.userLoggedIn} loginSubmit={this.logIn} signUpSubmit={this.signUp} logOut={this.logOut} addHoldingSubmit={this.addHolding}></Nav>
-        {userInfo}
+        <PortfolioHeader dayGainPercent={this.state.dayGainPercent} percentGain={this.state.percentGain} totalValue={this.state.totalValue} totalGain={this.state.totalGain} dayGain={this.state.dayGain} userLoggedIn={this.state.userLoggedIn}></PortfolioHeader>
         <Deck doubleClickFunction={this.handleDoubleCLick} currentHoldings={this.state.currentHoldings} height={this.state.height} width={this.state.width}></Deck>
       </div>
     );
