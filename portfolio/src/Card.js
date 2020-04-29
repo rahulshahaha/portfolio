@@ -15,6 +15,8 @@ class Card extends React.Component {
         var ticker = this.props.ticker;
         var quantity = this.props.quantity;
         var priceBought = this.props.priceBought;
+        var purchaseValue = quantity * priceBought;
+        purchaseValue = purchaseValue.toFixed(2);
         var name = this.props.name;
         var percentUp = (this.props.price - this.props.priceBought) / this.props.priceBought;
         var value = this.props.quantity * this.props.price;
@@ -45,6 +47,7 @@ class Card extends React.Component {
            <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,name,ticker,quantity,priceBought)}>
                <h1 className="companyName noSelect">{this.props.name} ({this.props.ticker})</h1>
                <h1 className="currentPrice noSelect">${price} <span className={this.props.changeType}>({this.props.percentChange}%)</span></h1>
+               <h6 className="overall noSelect">Purchase: {quantity} @ ${priceBought} (${purchaseValue})</h6>
                <h6 className="overall noSelect">Value:<span className={valueChangeClass}> ${value} (${valueChange})</span></h6>
                <h6 className="overall noSelect">Gain:<span className={perfromanceClass}> ${dollarsUp} ({percentUp}%)</span></h6>
            </div>
