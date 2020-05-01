@@ -12,41 +12,31 @@ class Card extends React.Component {
 
  
     render(){
-        var ticker = this.props.ticker;
+        //define numbers
+        var price = this.props.price;
         var quantity = this.props.quantity;
         var priceBought = this.props.priceBought;
         var purchaseValue = quantity * priceBought;
-        purchaseValue = purchaseValue.toFixed(2);
-        var name = this.props.name;
-        var percentUp = (this.props.price - this.props.priceBought) / this.props.priceBought;
+        var percentUp = 100*((this.props.price - this.props.priceBought) / this.props.priceBought);
         var value = this.props.quantity * this.props.price;
         var valueChange = (this.props.quantity * this.props.price) - (this.props.quantity * this.props.previousClose);
-        valueChange = valueChange.toFixed(2);
-        var valueChangeClass;
-        if(valueChange >= 0){
-            valueChangeClass = "valueChangeUp"
-        }else{
-            valueChangeClass = "valueChangeDown"
-        }
-        value = value.toFixed(2);
-        percentUp = percentUp * 100;
-        percentUp = percentUp.toFixed(2);
+        var valueChangeClass = valueChange >= 0 ? "valueChangeUp" : "valueChangeDown"
         var dollarsUp = (this.props.price * this.props.quantity) - (this.props.priceBought * this.props.quantity);
-        dollarsUp = dollarsUp.toFixed(2);
-        var perfromanceClass = "overallPerformanceUp noSelect";
-        if(dollarsUp < 0){
-           perfromanceClass = "overallPerformanceDown noSelect";
-        }
+        var perfromanceClass = dollarsUp >= 0 ? "overallPerformanceUp noSelect" : "overallPerformanceDown noSelect";
+    
 
-        value = this.numberWithCommas(value);
-        valueChange = this.numberWithCommas(valueChange);
-        dollarsUp = this.numberWithCommas(dollarsUp);
-        var price = this.numberWithCommas(this.props.price);
-        priceBought = this.numberWithCommas(priceBought);
-        purchaseValue = this.numberWithCommas(purchaseValue);
+        //Formatting
+        valueChange = this.numberWithCommas(valueChange.toFixed(2));
+        value = this.numberWithCommas(value.toFixed(2));
+        percentUp = percentUp.toFixed(2);
+        dollarsUp = this.numberWithCommas(dollarsUp.toFixed(2));
+        price = this.numberWithCommas(price.toFixed(2));
+        priceBought = this.numberWithCommas(priceBought.toFixed(2));
+        purchaseValue = this.numberWithCommas(purchaseValue.toFixed(2));
+        quantity = this.numberWithCommas(quantity.toFixed(2));
 
         return(
-           <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,name,ticker,quantity,priceBought)}>
+           <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,this.props.name,this.props.ticker,this.props.quantity,this.props.priceBought)}>
                <h1 className="companyName noSelect">{this.props.name} ({this.props.ticker})</h1>
                <h1 className="currentPrice noSelect">${price} <span className={this.props.changeType}>({this.props.percentChange}%)</span></h1>
                <h6 className="overall noSelect">Purchase: {quantity} @ ${priceBought} (${purchaseValue})</h6>
