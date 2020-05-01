@@ -1,10 +1,12 @@
 import React from 'react';
 
 class Card extends React.Component {
+    static defaultProps = {
+        holding:{
 
-    handleDoubleCLick(){
-        console.log("doubleClick");
+        }
     }
+
 
     numberWithCommas(x) {
         return parseFloat(x).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -12,18 +14,18 @@ class Card extends React.Component {
 
  
     render(){
-        //define numbers
-        var price = this.props.price;
-        var quantity = this.props.quantity;
-        var priceBought = this.props.priceBought;
+
+        var price = this.props.holding.price;
+        var quantity = this.props.holding.quantity;
+        var priceBought = this.props.holding.priceBought;
         var purchaseValue = quantity * priceBought;
-        var percentUp = 100*((this.props.price - this.props.priceBought) / this.props.priceBought);
-        var value = this.props.quantity * this.props.price;
-        var valueChange = (this.props.quantity * this.props.price) - (this.props.quantity * this.props.previousClose);
+        var percentUp = 100*((this.props.holding.price - this.props.holding.priceBought) / this.props.holding.priceBought);
+        var value = this.props.holding.quantity * this.props.holding.price;
+        var valueChange = (this.props.holding.quantity * this.props.holding.price) - (this.props.holding.quantity * this.props.holding.previousClose);
         var valueChangeClass = valueChange >= 0 ? "valueChangeUp" : "valueChangeDown"
-        var dollarsUp = (this.props.price * this.props.quantity) - (this.props.priceBought * this.props.quantity);
-        var perfromanceClass = dollarsUp >= 0 ? "overallPerformanceUp noSelect" : "overallPerformanceDown noSelect";
-    
+        var dollarsUp = (this.props.holding.price * this.props.holding.quantity) - (this.props.holding.priceBought * this.props.holding.quantity);
+        var performanceClass = dollarsUp >= 0 ? "overallPerformanceUp noSelect" : "overallPerformanceDown noSelect";
+   
 
         //Formatting
         valueChange = this.numberWithCommas(valueChange.toFixed(2));
@@ -36,12 +38,12 @@ class Card extends React.Component {
         quantity = this.numberWithCommas(quantity.toFixed(2));
 
         return(
-           <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,this.props.name,this.props.ticker,this.props.quantity,this.props.priceBought)}>
-               <h1 className="companyName noSelect">{this.props.name} ({this.props.ticker})</h1>
-               <h1 className="currentPrice noSelect">${price} <span className={this.props.changeType}>({this.props.percentChange}%)</span></h1>
+           <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,this.props.holding.name,this.props.holding.key,this.props.holding.quantity,this.props.holding.priceBought)}>
+               <h1 className="companyName noSelect">{this.props.holding.name} ({this.props.holding.key})</h1>
+               <h1 className="currentPrice noSelect">${price} <span className={this.props.holding.changeType}>({this.props.holding.percentChange}%)</span></h1>
                <h6 className="overall noSelect">Purchase: {quantity} @ ${priceBought} (${purchaseValue})</h6>
                <h6 className="overall noSelect">Value:<span className={valueChangeClass}> ${value} (${valueChange})</span></h6>
-               <h6 className="overall noSelect">Gain:<span className={perfromanceClass}> ${dollarsUp} ({percentUp}%)</span></h6>
+               <h6 className="overall noSelect">Gain:<span className={performanceClass}> ${dollarsUp} ({percentUp}%)</span></h6>
            </div>
         )
     }

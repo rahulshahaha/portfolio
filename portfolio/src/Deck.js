@@ -4,34 +4,25 @@ import Card from './Card';
 
 class Deck extends React.Component {
 
-    
     generateCards = () =>{
         var func = this.props.doubleClickFunction;
         var currentHoldings = this.props.currentHoldings;
         if(currentHoldings == null){
             return null;
         }
-
-        var height = this.props.height;
-        var width = this.props.width;
         var cardsList = this.props.currentHoldings.map(function(s){
-            return <Card doubleClickFunction={func} key={s.key} ticker={s.key} name={s.name} previousClose ={s.previousClose}  price={s.price} percentChange={s.percentChange} changeType={s.changeType} height={height} width={width} quantity={s.quantity} priceBought={s.priceBought} />;
+            return <Card key={s.key} doubleClickFunction={func} holding={s} />;
         });
-
          return cardsList;
     }
 
-
-
-
     render(){
-    return (
-        <div className="deck">
-            {this.generateCards()}
-        </div>
-    )
+        return (
+            <div className="deck">
+                {this.generateCards()}
+            </div>
+        )
     }
-
 }
 
 
