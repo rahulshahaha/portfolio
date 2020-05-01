@@ -514,14 +514,7 @@ displayWindowSize = () => {
 
  }
 
- numberWithCommas(x) {
-   if(x === undefined){
-     return 0;
-   }else{
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-   }
-}
-
+ 
 
   render(){
     return (
