@@ -89,12 +89,12 @@ class App extends React.Component {
     dayGainPercent *= 100;
 
     this.setState({
-      totalInvested: totalInvested.toFixed(2),
-      totalValue: totalValue.toFixed(2),
-      totalGain: totalGain.toFixed(2),
-      percentGain: percentGain.toFixed(2),
-      dayGain: dayGain.toFixed(2),
-      dayGainPercent: dayGainPercent.toFixed(2)
+      totalInvested: totalInvested,
+      totalValue: totalValue,
+      totalGain: totalGain,
+      percentGain: percentGain,
+      dayGain: dayGain,
+      dayGainPercent: dayGainPercent
     });
 
   }

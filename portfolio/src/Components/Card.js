@@ -8,7 +8,7 @@ class Card extends React.Component {
     }
 
 
-    numberWithCommas(x) {
+    formatDecimal(x) {
         return parseFloat(x).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
 
@@ -28,14 +28,14 @@ class Card extends React.Component {
    
 
         //Formatting
-        valueChange = this.numberWithCommas(valueChange.toFixed(2));
-        value = this.numberWithCommas(value.toFixed(2));
+        valueChange = this.formatDecimal(valueChange.toFixed(2));
+        value = this.formatDecimal(value.toFixed(2));
         percentUp = percentUp.toFixed(2);
-        dollarsUp = this.numberWithCommas(dollarsUp.toFixed(2));
-        price = this.numberWithCommas(price.toFixed(2));
-        priceBought = this.numberWithCommas(priceBought.toFixed(2));
-        purchaseValue = this.numberWithCommas(purchaseValue.toFixed(2));
-        quantity = this.numberWithCommas(quantity.toFixed(2));
+        dollarsUp = this.formatDecimal(dollarsUp.toFixed(2));
+        price = this.formatDecimal(price.toFixed(2));
+        priceBought = this.formatDecimal(priceBought.toFixed(2));
+        purchaseValue = this.formatDecimal(purchaseValue.toFixed(2));
+        quantity = this.formatDecimal(quantity.toFixed(2));
 
         return(
            <div className="card" onDoubleClick={this.props.doubleClickFunction.bind(this,this.props.holding.name,this.props.holding.key,this.props.holding.quantity,this.props.holding.priceBought)}>
