@@ -20,7 +20,7 @@ class Card extends React.Component {
         var priceBought = this.props.holding.priceBought;
         var purchaseValue = quantity * priceBought;
         var percentUp = 100*((this.props.holding.price - this.props.holding.priceBought) / this.props.holding.priceBought);
-        var value = this.props.holding.quantity * this.props.holding.price;
+        var value = this.props.holding.value;
         var valueChange = (this.props.holding.quantity * this.props.holding.price) - (this.props.holding.quantity * this.props.holding.previousClose);
         var valueChangeClass = valueChange >= 0 ? "valueChangeUp" : "valueChangeDown"
         var dollarsUp = (this.props.holding.price * this.props.holding.quantity) - (this.props.holding.priceBought * this.props.holding.quantity);

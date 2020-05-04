@@ -256,6 +256,7 @@ class App extends React.Component {
             var percentChange = (apiStockData.latestPrice - apiStockData.previousClose) / apiStockData.previousClose;
             percentChange = Math.round(percentChange * 100 * 100) / 100;
             var changeType = percentChange >= 0 ? "percentChangeUp noSelect" : "percentChangeDown noSelect";
+            var value = holding.data().quantity * apiStockData.latestPrice;
             fullStockData.push({
               key: holding.data().ticker,
               name: apiStockData.companyName,
@@ -264,7 +265,8 @@ class App extends React.Component {
               quantity: holding.data().quantity,
               priceBought: holding.data().price,
               price: apiStockData.latestPrice,
-              previousClose: apiStockData.previousClose
+              previousClose: apiStockData.previousClose,
+              value: value
             })
           })
           this.setState({
