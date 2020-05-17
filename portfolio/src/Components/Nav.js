@@ -14,23 +14,21 @@ class Nav extends React.Component {
         let navBar;
         if(this.props.userLoggedIn){
             navBar = (
-            <div className="navbar-fixed">
+        <div>
+            <div className="navbar-fixed hide-on-small-only">
                 <nav className="z-depth-0 grey darken-3 col l10">
                     <div className="row">
-                        <div className="nav-wrapper col l10">
-                            <a href="." className="brand-logo center">Welcome, {this.props.user.data().name}</a>
-                            <ul id="nav-mobile" className="left">
-                                <li className="logged-in">
-                                    <button className="btn black darken-2 z-depth-0" id="logout" onClick={this.props.logOut}>Logout</button>
-                                </li>
-                                <li className="logged-in">
-                                    <button className="btn black darken-2 z-depth-0 modal-trigger" data-target="modal-addHolding">Add Holding</button>
-                                </li>
-                                <li className="logged-in">
-                                    <button className="btn yellow darken-2 z-depth-0 black-text" onClick={this.props.dataUpdate}>Update Data</button>
-                                </li>
-                            </ul>
-                        </div>
+                        <ul id="nav-mobile" className="left">
+                            <li className="logged-in">
+                                <button className="btn black darken-2 z-depth-0" id="logout" onClick={this.props.logOut}>Logout</button>
+                            </li>
+                            <li className="logged-in">
+                                <button className="btn black darken-2 z-depth-0 modal-trigger" data-target="modal-addHolding">Add Holding</button>
+                            </li>
+                            <li className="logged-in">
+                                <button className="btn yellow darken-2 z-depth-0 black-text" onClick={this.props.dataUpdate}>Update Data</button>
+                            </li>
+                        </ul>
                         <form onSubmit={this.props.search} id="search-form" autoComplete="off" className="right grey darken-3 input-field col l2">
                             <input placeholder="Search" id="search-ticker" type="text" className="white-text"/>
                             <label htmlFor="search-ticker"></label>
@@ -38,6 +36,7 @@ class Nav extends React.Component {
                     </div>
                 </nav>
             </div>
+        </div>
             );
         }else{
             navBar = (
