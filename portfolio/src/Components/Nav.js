@@ -43,7 +43,6 @@ class Nav extends React.Component {
             <div className="navbar-fixed">
                 <nav className="z-depth-0 grey darken-3">
                     <div className="nav-wrapper">
-                        <a href="." className="brand-logo center">Please Login</a>
                         <ul id="nav-mobile" className="left">
                             <li className="logged-out">
                                 <button className="btn black darken-2 z-depth-0 modal-trigger" data-target="modal-login">Login</button>
