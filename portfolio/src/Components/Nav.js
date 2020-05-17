@@ -15,8 +15,8 @@ class Nav extends React.Component {
         if(this.props.userLoggedIn){
             navBar = (
         <div>
-            <div className="navbar-fixed hide-on-small-only">
-                <nav className="z-depth-0 grey darken-3 col l10">
+            <div className="navbar-fixed">
+                <nav className="z-depth-0 grey darken-3 col l10 hide-on-small-only">
                     <div className="row">
                         <ul id="nav-mobile" className="left">
                             <li className="logged-in">
