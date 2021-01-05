@@ -32,7 +32,7 @@ class Card extends React.Component {
         value = this.formatDecimal(value.toFixed(2));
         percentUp = percentUp.toFixed(2);
         dollarsUp = this.formatDecimal(dollarsUp.toFixed(2));
-        price = this.formatDecimal(price.toFixed(2));
+        price != null ? price = this.formatDecimal(price.toFixed(2)) : price = 0;
         priceBought = this.formatDecimal(priceBought.toFixed(2));
         purchaseValue = this.formatDecimal(purchaseValue.toFixed(2));
         quantity = this.formatDecimal(quantity.toFixed(2));

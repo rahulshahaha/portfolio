@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
+
 class App extends React.Component {
   
   constructor(props) {
@@ -254,7 +256,9 @@ class App extends React.Component {
                 apiStockData = stockData[key].quote;
               }
             }
-            var percentChange = (apiStockData.latestPrice - apiStockData.previousClose) / apiStockData.previousClose;
+            var previousClose = apiStockData.previousClose;
+            // === null ? apiStockData.open : apiStockData.previousClose;
+            var percentChange = (apiStockData.latestPrice - previousClose) / previousClose;
             percentChange = Math.round(percentChange * 100 * 100) / 100;
             var changeType = percentChange >= 0 ? "percentChangeUp noSelect" : "percentChangeDown noSelect";
             var value = holding.data().quantity * apiStockData.latestPrice;
@@ -266,7 +270,7 @@ class App extends React.Component {
               quantity: holding.data().quantity,
               priceBought: holding.data().price,
               price: apiStockData.latestPrice,
-              previousClose: apiStockData.previousClose,
+              previousClose: previousClose,
               value: value
             })
           })
